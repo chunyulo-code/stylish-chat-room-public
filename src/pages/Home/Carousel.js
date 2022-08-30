@@ -32,7 +32,6 @@ const Story = styled.div`
   margin: 0 auto;
   padding-top: 166px;
   padding-left: 47px;
-  font-family: PingFangTC;
   font-weight: 100;
 
   @media screen and (max-width: 1279px) {

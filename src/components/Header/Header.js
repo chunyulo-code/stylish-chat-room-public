@@ -22,7 +22,6 @@ const Wrapper = styled.div`
   background-color: white;
   display: flex;
   align-items: center;
-  font-family: PingFangTC;
 
   @media screen and (max-width: 1279px) {
     height: 52px;
