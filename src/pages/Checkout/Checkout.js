@@ -274,35 +274,6 @@ const CheckoutButton = styled.button`
   }
 `;
 
-const recipientFormGroups = [
-  {
-    label: '收件人姓名',
-    key: 'name',
-    text: '務必填寫完整收件人姓名，避免包裹無法順利簽收',
-  },
-  { label: 'Email', key: 'email' },
-  { label: '手機', key: 'phone' },
-  { label: '地址', key: 'address' },
-  {
-    label: '配送時間',
-    key: 'time',
-    options: [
-      {
-        label: '08:00-12:00',
-        value: 'morning',
-      },
-      {
-        label: '14:00-18:00',
-        value: 'afternoon',
-      },
-      {
-        label: '不指定',
-        value: 'anytime',
-      },
-    ],
-  },
-];
-
 function Checkout() {
   const [recipient, setRecipient] = useState({
     name: '',
@@ -408,35 +379,102 @@ function Checkout() {
       <form>
         <FormFieldSet>
           <FormLegend>訂購資料</FormLegend>
-          {recipientFormGroups.map(({ label, key, text, options }) => (
-            <FormGroup key={key}>
-              <FormLabel>{label}</FormLabel>
-              {options ? (
-                options.map((option) => (
-                  <FormCheck key={option.value}>
-                    <FormCheckInput
-                      type="radio"
-                      checked={recipient.time === option.value}
-                      onChange={(e) => {
-                        if (e.target.checked)
-                          setRecipient({ ...recipient, time: option.value });
-                      }}
-                    />
-                    <FormCheckLabel>{option.label}</FormCheckLabel>
-                  </FormCheck>
-                ))
-              ) : (
-                <FormControl
-                  value={recipient[key]}
-                  onChange={(e) =>
-                    setRecipient({ ...recipient, [key]: e.target.value })
-                  }
+          {/* 
+          const recipientFormGroups = [
+  {
+    label: '收件人姓名',
+    key: 'name',
+    text: '務必填寫完整收件人姓名，避免包裹無法順利簽收',
+  },
+  { label: 'Email', key: 'email' },
+  { label: '手機', key: 'phone' },
+  { label: '地址', key: 'address' },
+  {
+    label: '配送時間',
+    key: 'time',
+    options: [
+      {
+        label: '08:00-12:00',
+        value: 'morning',
+      },
+      {
+        label: '14:00-18:00',
+        value: 'afternoon',
+      },
+      {
+        label: '不指定',
+        value: 'anytime',
+      },
+    ],
+  },
+];
+          */}
+          <FormGroup>
+            <FormLabel>收件人姓名</FormLabel>
+            <FormControl
+              value={recipient.name}
+              onChange={(e) =>
+                setRecipient({ ...recipient, name: e.target.value })
+              }
+            />
+            <FormText>務必填寫完整收件人姓名，避免包裹無法順利簽收</FormText>
+          </FormGroup>
+          <FormGroup>
+            <FormLabel>Email</FormLabel>
+            <FormControl
+              value={recipient.email}
+              onChange={(e) =>
+                setRecipient({ ...recipient, email: e.target.value })
+              }
+            />
+          </FormGroup>
+          <FormGroup>
+            <FormLabel>手機</FormLabel>
+            <FormControl
+              value={recipient.phone}
+              onChange={(e) =>
+                setRecipient({ ...recipient, phone: e.target.value })
+              }
+            />
+          </FormGroup>
+          <FormGroup>
+            <FormLabel>地址</FormLabel>
+            <FormControl
+              value={recipient.address}
+              onChange={(e) =>
+                setRecipient({ ...recipient, address: e.target.value })
+              }
+            />
+          </FormGroup>
+          <FormGroup>
+            <FormLabel>配送時間</FormLabel>
+            {[
+              {
+                label: '08:00-12:00',
+                value: 'morning',
+              },
+              {
+                label: '14:00-18:00',
+                value: 'afternoon',
+              },
+              {
+                label: '不指定',
+                value: 'anytime',
+              },
+            ].map((option) => (
+              <FormCheck key={option.value}>
+                <FormCheckInput
+                  type="radio"
+                  checked={recipient.time === option.value}
+                  onChange={(e) => {
+                    if (e.target.checked)
+                      setRecipient({ ...recipient, time: option.value });
+                  }}
                 />
-              )}
-
-              {text && <FormText>{text}</FormText>}
-            </FormGroup>
-          ))}
+                <FormCheckLabel>{option.label}</FormCheckLabel>
+              </FormCheck>
+            ))}
+          </FormGroup>
         </FormFieldSet>
         <FormFieldSet>
           <FormLegend>付款資料</FormLegend>
