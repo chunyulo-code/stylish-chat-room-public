@@ -1,9 +1,9 @@
-import { useContext, useState } from 'react';
+import { useState } from 'react';
+import { useOutletContext } from 'react-router-dom';
 import styled from 'styled-components';
 
 import add from './add.png';
 import minus from './minus.png';
-import CartContext from '../../contexts/CartContext';
 
 const Option = styled.div`
   display: flex;
@@ -124,7 +124,7 @@ function ProductVariants({ product }) {
   );
   const [selectedSize, setSelectedSize] = useState();
   const [quantity, setQuantity] = useState(1);
-  const cart = useContext(CartContext);
+  const [cartItems, setCartItems] = useOutletContext();
 
   function getStock(colorCode, size) {
     return product.variants.find(
@@ -138,16 +138,22 @@ function ProductVariants({ product }) {
       return;
     }
 
-    cart.addItem({
-      color: product.colors.find((color) => color.code === selectedColorCode),
-      id: product.id,
-      image: product.main_image,
-      name: product.title,
-      price: product.price,
-      qty: quantity,
-      size: selectedSize,
-      stock: getStock(selectedColorCode, selectedSize),
-    });
+    const newCartItems = [
+      ...cartItems,
+      {
+        color: product.colors.find((color) => color.code === selectedColorCode),
+        id: product.id,
+        image: product.main_image,
+        name: product.title,
+        price: product.price,
+        qty: quantity,
+        size: selectedSize,
+        stock: getStock(selectedColorCode, selectedSize),
+      },
+    ];
+    setCartItems(newCartItems);
+    window.localStorage.setItem('cartItems', JSON.stringify(newCartItems));
+    window.alert('已加入商品');
   }
   return (
     <>

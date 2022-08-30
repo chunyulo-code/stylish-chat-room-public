@@ -5,7 +5,6 @@ import { Reset } from 'styled-reset';
 
 import Footer from './components/Footer/Footer';
 import Header from './components/Header/Header';
-import CartContext from './contexts/CartContext';
 
 const GlobalStyle = createGlobalStyle`
   * {
@@ -32,60 +31,14 @@ function App() {
     JSON.parse(window.localStorage.getItem('cartItems')) || []
   );
 
-  function getItems() {
-    return cartItems;
-  }
-
-  function addItem(item) {
-    const newCartItems = [...cartItems, item];
-    setCartItems(newCartItems);
-    window.localStorage.setItem('cartItems', JSON.stringify(newCartItems));
-    window.alert('已加入商品');
-  }
-
-  function changeItemQuantity(itemIndex, itemQuantity) {
-    const newCartItems = cartItems.map((item, index) =>
-      index === itemIndex
-        ? {
-            ...item,
-            qty: itemQuantity,
-          }
-        : item
-    );
-    setCartItems(newCartItems);
-    window.localStorage.setItem('cartItems', JSON.stringify(newCartItems));
-    window.alert('已修改數量');
-  }
-
-  function deleteItem(itemIndex) {
-    const newCartItems = cartItems.filter((_, index) => index !== itemIndex);
-    setCartItems(newCartItems);
-    window.localStorage.setItem('cartItems', JSON.stringify(newCartItems));
-    window.alert('已刪除商品');
-  }
-
-  function clearItems() {
-    const newCartItems = [];
-    setCartItems(newCartItems);
-    window.localStorage.setItem('cartItems', JSON.stringify(newCartItems));
-  }
-
-  const cart = {
-    getItems,
-    addItem,
-    changeItemQuantity,
-    deleteItem,
-    clearItems,
-  };
-
   return (
-    <CartContext.Provider value={cart}>
+    <>
       <Reset />
       <GlobalStyle />
-      <Header />
-      <Outlet />
+      <Header cartItems={cartItems} />
+      <Outlet context={[cartItems, setCartItems]} />
       <Footer />
-    </CartContext.Provider>
+    </>
   );
 }
 

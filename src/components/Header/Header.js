@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -8,7 +8,6 @@ import cart from './cart.png';
 import cartMobile from './cart-mobile.png';
 import profile from './profile.png';
 import profileMobile from './profile-mobile.png';
-import CartContext from '../../contexts/CartContext';
 
 const Wrapper = styled.div`
   position: fixed;
@@ -238,12 +237,11 @@ const categories = [
   },
 ];
 
-function Header() {
+function Header({ cartItems }) {
   const [inputValue, setInputValue] = useState('');
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const category = searchParams.get('category');
-  const { getItems } = useContext(CartContext);
 
   useEffect(() => {
     if (category) setInputValue('');
@@ -275,7 +273,7 @@ function Header() {
       <PageLinks>
         <PageLink to="/checkout">
           <PageLinkCartIcon icon={cart}>
-            <PageLinkIconNumber>{getItems().length}</PageLinkIconNumber>
+            <PageLinkIconNumber>{cartItems.length}</PageLinkIconNumber>
           </PageLinkCartIcon>
           <PageLinkText>購物車</PageLinkText>
         </PageLink>

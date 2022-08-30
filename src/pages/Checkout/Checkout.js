@@ -1,8 +1,7 @@
-import { useContext, useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useRef, useState } from 'react';
+import { useNavigate, useOutletContext } from 'react-router-dom';
 import styled from 'styled-components';
 
-import CartContext from '../../contexts/CartContext';
 import api from '../../utils/api';
 import getJwtToken from '../../utils/getJwtToken';
 import tappay from '../../utils/tappay';
@@ -312,8 +311,7 @@ function Checkout() {
     address: '',
     time: '',
   });
-  const cart = useContext(CartContext);
-  const items = cart.getItems();
+  const [cartItems, setCartItems] = useOutletContext();
   const navigate = useNavigate();
   const cardNumberRef = useRef();
   const cardExpirationDateRef = useRef();
@@ -328,7 +326,7 @@ function Checkout() {
     );
   }, []);
 
-  const subtotal = items.reduce(
+  const subtotal = cartItems.reduce(
     (prev, item) => prev + item.price * item.qty,
     0
   );
@@ -348,7 +346,7 @@ function Checkout() {
     }
     window.localStorage.setItem('jwtToken', jwtToken);
 
-    if (items.length === 0) {
+    if (cartItems.length === 0) {
       window.alert('尚未選購商品');
       return;
     }
@@ -379,13 +377,13 @@ function Checkout() {
           freight,
           total: subtotal + freight,
           recipient,
-          list: cart.getItems(),
+          list: cartItems,
         },
       },
       jwtToken
     );
     window.alert('付款成功');
-    cart.clearItems();
+    setCartItems([]);
     navigate('/thankyou', { state: { orderNumber: data.number } });
   }
 

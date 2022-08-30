@@ -1,7 +1,6 @@
-import { useContext } from 'react';
+import { useOutletContext } from 'react-router-dom';
 import styled from 'styled-components';
 
-import CartContext from '../../contexts/CartContext';
 import trash from './trash.png';
 
 const Header = styled.div`
@@ -211,20 +210,40 @@ const DeleteButton = styled.div`
 `;
 
 function Cart() {
-  const cart = useContext(CartContext);
-  const items = cart.getItems();
+  const [cartItems, setCartItems] = useOutletContext();
+
+  function changeItemQuantity(itemIndex, itemQuantity) {
+    const newCartItems = cartItems.map((item, index) =>
+      index === itemIndex
+        ? {
+            ...item,
+            qty: itemQuantity,
+          }
+        : item
+    );
+    setCartItems(newCartItems);
+    window.localStorage.setItem('cartItems', JSON.stringify(newCartItems));
+    window.alert('已修改數量');
+  }
+
+  function deleteItem(itemIndex) {
+    const newCartItems = cartItems.filter((_, index) => index !== itemIndex);
+    setCartItems(newCartItems);
+    window.localStorage.setItem('cartItems', JSON.stringify(newCartItems));
+    window.alert('已刪除商品');
+  }
 
   return (
     <>
       <Header>
-        <ItemCount>購物車({items.length})</ItemCount>
+        <ItemCount>購物車({cartItems.length})</ItemCount>
         <Quantity hideOnMobile>數量</Quantity>
         <UnitPrice hideOnMobile>單價</UnitPrice>
         <Price hideOnMobile>小計</Price>
         <Empty />
       </Header>
       <Items>
-        {items.map((item, index) => (
+        {cartItems.map((item, index) => (
           <Item key={`${item.id}-${item.color.code}-${item.size}`}>
             <ItemImage src={item.image} />
             <ItemDetails>
@@ -237,7 +256,7 @@ function Cart() {
               <ItemQuantityName hideOnDesktop>數量</ItemQuantityName>
               <ItemQuantitySelect
                 value={item.qty}
-                onChange={(e) => cart.changeItemQuantity(index, e.target.value)}
+                onChange={(e) => changeItemQuantity(index, e.target.value)}
               >
                 {Array(item.stock)
                   .fill()
@@ -254,7 +273,7 @@ function Cart() {
               <ItemPriceName hideOnDesktop>小計</ItemPriceName>
               <ItemPriceValue>NT.{item.qty * item.price}</ItemPriceValue>
             </ItemPrice>
-            <DeleteButton onClick={() => cart.deleteItem(index)} />
+            <DeleteButton onClick={() => deleteItem(index)} />
           </Item>
         ))}
       </Items>
