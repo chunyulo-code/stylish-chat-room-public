@@ -274,6 +274,32 @@ const CheckoutButton = styled.button`
   }
 `;
 
+const formInputs = [
+  {
+    label: '收件人姓名',
+    key: 'name',
+    text: '務必填寫完整收件人姓名，避免包裹無法順利簽收',
+  },
+  { label: 'Email', key: 'email' },
+  { label: '手機', key: 'phone' },
+  { label: '地址', key: 'address' },
+];
+
+const timeOptions = [
+  {
+    label: '08:00-12:00',
+    value: 'morning',
+  },
+  {
+    label: '14:00-18:00',
+    value: 'afternoon',
+  },
+  {
+    label: '不指定',
+    value: 'anytime',
+  },
+];
+
 function Checkout() {
   const [recipient, setRecipient] = useState({
     name: '',
@@ -379,89 +405,21 @@ function Checkout() {
       <form>
         <FormFieldSet>
           <FormLegend>訂購資料</FormLegend>
-          {/* 
-          const recipientFormGroups = [
-  {
-    label: '收件人姓名',
-    key: 'name',
-    text: '務必填寫完整收件人姓名，避免包裹無法順利簽收',
-  },
-  { label: 'Email', key: 'email' },
-  { label: '手機', key: 'phone' },
-  { label: '地址', key: 'address' },
-  {
-    label: '配送時間',
-    key: 'time',
-    options: [
-      {
-        label: '08:00-12:00',
-        value: 'morning',
-      },
-      {
-        label: '14:00-18:00',
-        value: 'afternoon',
-      },
-      {
-        label: '不指定',
-        value: 'anytime',
-      },
-    ],
-  },
-];
-          */}
-          <FormGroup>
-            <FormLabel>收件人姓名</FormLabel>
-            <FormControl
-              value={recipient.name}
-              onChange={(e) =>
-                setRecipient({ ...recipient, name: e.target.value })
-              }
-            />
-            <FormText>務必填寫完整收件人姓名，避免包裹無法順利簽收</FormText>
-          </FormGroup>
-          <FormGroup>
-            <FormLabel>Email</FormLabel>
-            <FormControl
-              value={recipient.email}
-              onChange={(e) =>
-                setRecipient({ ...recipient, email: e.target.value })
-              }
-            />
-          </FormGroup>
-          <FormGroup>
-            <FormLabel>手機</FormLabel>
-            <FormControl
-              value={recipient.phone}
-              onChange={(e) =>
-                setRecipient({ ...recipient, phone: e.target.value })
-              }
-            />
-          </FormGroup>
-          <FormGroup>
-            <FormLabel>地址</FormLabel>
-            <FormControl
-              value={recipient.address}
-              onChange={(e) =>
-                setRecipient({ ...recipient, address: e.target.value })
-              }
-            />
-          </FormGroup>
+          {formInputs.map((input) => (
+            <FormGroup key={input.key}>
+              <FormLabel>{input.label}</FormLabel>
+              <FormControl
+                value={recipient[input.key]}
+                onChange={(e) =>
+                  setRecipient({ ...recipient, [input.key]: e.target.value })
+                }
+              />
+              {input.text && <FormText>{input.text}</FormText>}
+            </FormGroup>
+          ))}
           <FormGroup>
             <FormLabel>配送時間</FormLabel>
-            {[
-              {
-                label: '08:00-12:00',
-                value: 'morning',
-              },
-              {
-                label: '14:00-18:00',
-                value: 'afternoon',
-              },
-              {
-                label: '不指定',
-                value: 'anytime',
-              },
-            ].map((option) => (
+            {timeOptions.map((option) => (
               <FormCheck key={option.value}>
                 <FormCheckInput
                   type="radio"

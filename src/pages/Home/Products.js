@@ -1,6 +1,7 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
+import ReactLoading from 'react-loading';
 
 import api from '../../utils/api';
 
@@ -92,68 +93,72 @@ const ProductPrice = styled.div`
   }
 `;
 
+const Loading = styled(ReactLoading)`
+  margin: 0 auto;
+`;
+
 function Products() {
   const [products, setProducts] = useState([]);
-  const nextPagingRef = useRef();
-  const waypointRef = useRef();
+  const [isLoading, setIsLoading] = useState(false);
   const [searchParams] = useSearchParams();
 
   const keyword = searchParams.get('keyword');
-  const category = searchParams.get('category');
+  const category = searchParams.get('category') || 'all';
 
   useEffect(() => {
-    setProducts([]);
-    nextPagingRef.current = 0;
+    let nextPaging = 0;
     let isFetching = false;
 
-    const intersectionObserver = new IntersectionObserver(async (entries) => {
-      if (entries[0].intersectionRatio <= 0) return;
-      if (nextPagingRef.current === undefined) return;
-      if (isFetching) return;
-
-      function fetchProducts() {
-        if (keyword) {
-          return api.searchProducts(keyword, nextPagingRef.current);
-        }
-        if (category) {
-          return api.getProducts(category, nextPagingRef.current);
-        }
-        return api.getProducts('all', nextPagingRef.current);
-      }
-
+    async function fetchProducts() {
       isFetching = true;
-      const { data, next_paging } = await fetchProducts();
-      setProducts((prev) => [...prev, ...data]);
-      nextPagingRef.current = next_paging;
+      setIsLoading(true);
+      const response = keyword
+        ? await api.searchProducts(keyword, nextPaging)
+        : await api.getProducts(category, nextPaging);
+      if (nextPaging === 0) {
+        setProducts(response.data);
+      } else {
+        setProducts((prev) => [...prev, ...response.data]);
+      }
+      nextPaging = response.next_paging;
       isFetching = false;
-    });
+      setIsLoading(false);
+    }
 
-    intersectionObserver.observe(waypointRef.current);
-    const waypoint = waypointRef.current;
+    async function scrollHandler() {
+      if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+        if (nextPaging === undefined) return;
+        if (isFetching) return;
+
+        fetchProducts();
+      }
+    }
+
+    fetchProducts();
+
+    window.addEventListener('scroll', scrollHandler);
 
     return () => {
-      intersectionObserver.unobserve(waypoint);
+      window.removeEventListener('scroll', scrollHandler);
     };
   }, [keyword, category]);
 
   return (
-    <>
-      <Wrapper>
-        {products.map(({ id, main_image, colors, title, price }) => (
-          <Product key={id} to={`/products/${id}`}>
-            <ProductImage src={main_image} />
-            <ProductColors>
-              {colors.map(({ code }) => (
-                <ProductColor $colorCode={`#${code}`} key={code} />
-              ))}
-            </ProductColors>
-            <ProductTitle>{title}</ProductTitle>
-            <ProductPrice>TWD.{price}</ProductPrice>
-          </Product>
-        ))}
-      </Wrapper>
-      <div ref={waypointRef} />
-    </>
+    <Wrapper>
+      {products.map(({ id, main_image, colors, title, price }) => (
+        <Product key={id} to={`/products/${id}`}>
+          <ProductImage src={main_image} />
+          <ProductColors>
+            {colors.map(({ code }) => (
+              <ProductColor $colorCode={`#${code}`} key={code} />
+            ))}
+          </ProductColors>
+          <ProductTitle>{title}</ProductTitle>
+          <ProductPrice>TWD.{price}</ProductPrice>
+        </Product>
+      ))}
+      {isLoading && <Loading type="spinningBubbles" color="#313538" />}
+    </Wrapper>
   );
 }
 

@@ -57,7 +57,7 @@ const CategoryLinks = styled.div`
   }
 `;
 
-const CategoryLink = styled(Link)`
+const CategoryLink = styled.a`
   font-size: 20px;
   letter-spacing: 30px;
   padding-left: 39px;
@@ -253,9 +253,15 @@ function Header({ cartItems }) {
       <CategoryLinks>
         {categories.map(({ name, displayText }, index) => (
           <CategoryLink
-            to={`/?category=${name}`}
             $isActive={category === name}
             key={index}
+            onClick={() => {
+              window.scrollTo({
+                top: 0,
+                behavior: 'smooth',
+              });
+              navigate(`/?category=${name}`);
+            }}
           >
             {displayText}
           </CategoryLink>
