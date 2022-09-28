@@ -17,7 +17,7 @@ const fb = {
   },
   init() {
     window.FB.init({
-      appId: '700590737403665',
+      appId: process.env.REACT_APP_FACEBOOK_ID,
       cookie: true,
       xfbml: true,
       version: 'v10.0',

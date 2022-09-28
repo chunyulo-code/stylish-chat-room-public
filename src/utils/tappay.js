@@ -1,8 +1,8 @@
 const tappay = {
   setupSDK() {
     window.TPDirect.setupSDK(
-      '12348',
-      'app_pa1pQcKoY22IlnSXq5m5WP5jFKzoRG58VEXpT7wU62ud7mMbDOGzCYIlzzLF',
+      process.env.REACT_APP_TAPPAY_ID,
+      process.env.REACT_APP_TAPPAY_KEY,
       'sandbox'
     );
   },
