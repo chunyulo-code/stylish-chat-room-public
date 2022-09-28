@@ -78,6 +78,7 @@ const CategoryLink = styled.a`
 
   &:hover {
     color: #8b572a;
+    cursor: pointer;
 
     @media screen and (max-width: 1279px) {
       color: white;
