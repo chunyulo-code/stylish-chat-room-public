@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -8,6 +8,7 @@ import cart from './cart.png';
 import cartMobile from './cart-mobile.png';
 import profile from './profile.png';
 import profileMobile from './profile-mobile.png';
+import { AuthContext } from '../../context/authContext';
 
 const Wrapper = styled.div`
   position: fixed;
@@ -194,7 +195,8 @@ const PageLinkCartIcon = styled(PageLinkIcon)`
 `;
 
 const PageLinkProfileIcon = styled(PageLinkIcon)`
-  background-image: url(${profile});
+  background-image: url(${({ url }) => url ?? profile});
+  border-radius: 50%;
 
   @media screen and (max-width: 1279px) {
     background-image: url(${profileMobile});
@@ -240,6 +242,7 @@ const categories = [
 
 function Header({ cartItems }) {
   const [inputValue, setInputValue] = useState('');
+  const { user } = useContext(AuthContext)
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const category = searchParams.get('category');
@@ -285,7 +288,7 @@ function Header({ cartItems }) {
           <PageLinkText>購物車</PageLinkText>
         </PageLink>
         <PageLink to="/profile">
-          <PageLinkProfileIcon icon={profile} />
+          <PageLinkProfileIcon icon={profile} url={user?.picture} />
           <PageLinkText>會員</PageLinkText>
         </PageLink>
       </PageLinks>

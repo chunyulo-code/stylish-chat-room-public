@@ -5,6 +5,7 @@ import { Reset } from 'styled-reset';
 
 import Footer from './components/Footer/Footer';
 import Header from './components/Header/Header';
+import { AuthContextProvider } from './context/authContext';
 
 const GlobalStyle = createGlobalStyle`
   * {
@@ -32,13 +33,13 @@ function App() {
   );
 
   return (
-    <>
+    <AuthContextProvider>
       <Reset />
       <GlobalStyle />
       <Header cartItems={cartItems} />
       <Outlet context={[cartItems, setCartItems]} />
       <Footer />
-    </>
+    </AuthContextProvider>
   );
 }
 
