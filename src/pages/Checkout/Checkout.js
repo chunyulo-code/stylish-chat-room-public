@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState, useContext } from 'react';
-import { useNavigate, useOutletContext } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import api from '../../utils/api';
 import tappay from '../../utils/tappay';
 import { AuthContext } from '../../context/authContext';
+import { CartContext } from '../../context/cartContext';
 import Cart from './Cart';
 
 const Wrapper = styled.div`
@@ -308,13 +309,13 @@ function Checkout() {
     address: '',
     time: '',
   });
-  const [cartItems, setCartItems] = useOutletContext();
   const navigate = useNavigate();
   const cardNumberRef = useRef();
   const cardExpirationDateRef = useRef();
   const cardCCVRef = useRef();
 
   const { jwtToken, isLogin, login } = useContext(AuthContext);
+  const { cartItems, setCartItems } = useContext(CartContext);
 
   useEffect(() => {
     const setupTappay = async () => {

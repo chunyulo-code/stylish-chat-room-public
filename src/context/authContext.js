@@ -19,7 +19,6 @@ export const AuthContext = createContext({
 export const AuthContextProvider = ({ children }) => {
   const [isLogin, setIsLogin] = useState(false);
   const [user, setUser] = useState({});
-  console.log({ user });
   const [loading, setLoading] = useState(true);
   const [jwtToken, setJwtToken] = useState();
 

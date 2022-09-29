@@ -9,6 +9,7 @@ import cartMobile from './cart-mobile.png';
 import profile from './profile.png';
 import profileMobile from './profile-mobile.png';
 import { AuthContext } from '../../context/authContext';
+import { CartContext } from '../../context/cartContext';
 
 const Wrapper = styled.div`
   position: fixed;
@@ -240,9 +241,10 @@ const categories = [
   },
 ];
 
-function Header({ cartItems }) {
+function Header() {
   const [inputValue, setInputValue] = useState('');
   const { user } = useContext(AuthContext)
+  const { cartCount } = useContext(CartContext);
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const category = searchParams.get('category');
@@ -283,7 +285,7 @@ function Header({ cartItems }) {
       <PageLinks>
         <PageLink to="/checkout">
           <PageLinkCartIcon icon={cart}>
-            <PageLinkIconNumber>{cartItems.length}</PageLinkIconNumber>
+            <PageLinkIconNumber>{cartCount}</PageLinkIconNumber>
           </PageLinkCartIcon>
           <PageLinkText>購物車</PageLinkText>
         </PageLink>
