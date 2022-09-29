@@ -6,6 +6,7 @@ import api from '../../utils/api';
 import tappay from '../../utils/tappay';
 import { AuthContext } from '../../context/authContext';
 import { CartContext } from '../../context/cartContext';
+import Button from '../../components/Button';
 import Cart from './Cart';
 
 const Wrapper = styled.div`
@@ -252,29 +253,6 @@ const PriceValue = styled.div`
   color: #3f3a3a;
 `;
 
-const CheckoutButton = styled.button`
-  width: 240px;
-  height: 60px;
-  margin-top: 50px;
-  border: solid 1px #979797;
-  background-color: black;
-  color: white;
-  font-size: 20px;
-  letter-spacing: 4px;
-  margin-left: auto;
-  display: block;
-  cursor: pointer;
-
-  @media screen and (max-width: 1279px) {
-    width: 100%;
-    height: 44px;
-    margin-top: 36px;
-    border: solid 1px black;
-    font-size: 16px;
-    letter-spacing: 3.2px;
-  }
-`;
-
 const formInputs = [
   {
     label: '收件人姓名',
@@ -309,6 +287,7 @@ function Checkout() {
     address: '',
     time: '',
   });
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const cardNumberRef = useRef();
   const cardExpirationDateRef = useRef();
@@ -338,6 +317,8 @@ function Checkout() {
 
   async function checkout() {
     try {
+      setLoading(true);      
+
       const token = isLogin ? jwtToken : await login();
 
       if (!token) {
@@ -386,6 +367,8 @@ function Checkout() {
       navigate('/thankyou', { state: { orderNumber: data.number } });
     } catch (err) {
       console.log(err);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -470,7 +453,7 @@ function Checkout() {
         <Currency>NT.</Currency>
         <PriceValue>{subtotal + freight}</PriceValue>
       </TotalPrice>
-      <CheckoutButton onClick={checkout}>確認付款</CheckoutButton>
+      <Button loading={loading} onClick={checkout}>確認付款</Button>
     </Wrapper>
   );
 }
