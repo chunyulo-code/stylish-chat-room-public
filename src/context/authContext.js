@@ -34,19 +34,20 @@ export const AuthContextProvider = ({ children }) => {
     setJwtToken(tokenFromServer);
     window.localStorage.setItem('jwtToken', tokenFromServer);
     setIsLogin(true);
+    return tokenFromServer;
   }, []);
 
   useEffect(() => {
     const checkAuthStatus = async () => {
       await fb.init();
       const response = await fb.getLoginStatus();
-      console.log(response.status);
       if (response.status === 'connected') {
         handleLoginResponse(response);
+        setLoading(false);
       } else {
         window.localStorage.removeItem('jwtToken');
+        setLoading(false);
       }
-      setLoading(false);
     }
     checkAuthStatus();
   }, [handleLoginResponse]);
@@ -55,11 +56,14 @@ export const AuthContextProvider = ({ children }) => {
     setLoading(true);
     const response = await fb.login();
     if (response.status === 'connected') {
-      handleLoginResponse(response);
+      const tokenFromServer = handleLoginResponse(response);
+      setLoading(false);
+      return tokenFromServer;
     } else {
       window.localStorage.removeItem('jwtToken');
+      setLoading(false);
+      return null;
     }
-    setLoading(false);
   }
 
   const logout = async () => {

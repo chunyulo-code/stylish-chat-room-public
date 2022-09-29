@@ -1,10 +1,10 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useContext } from 'react';
 import { useNavigate, useOutletContext } from 'react-router-dom';
 import styled from 'styled-components';
 
 import api from '../../utils/api';
-import getJwtToken from '../../utils/getJwtToken';
 import tappay from '../../utils/tappay';
+import { AuthContext } from '../../context/authContext';
 import Cart from './Cart';
 
 const Wrapper = styled.div`
@@ -314,6 +314,8 @@ function Checkout() {
   const cardExpirationDateRef = useRef();
   const cardCCVRef = useRef();
 
+  const { jwtToken, isLogin, login } = useContext(AuthContext);
+
   useEffect(() => {
     const setupTappay = async () => {
       await tappay.setupSDK();
@@ -334,57 +336,56 @@ function Checkout() {
   const freight = 30;
 
   async function checkout() {
-    let jwtToken = window.localStorage.getItem('jwtToken');
+    try {
+      const token = isLogin ? jwtToken : await login();
 
-    if (!jwtToken) {
-      try {
-        jwtToken = await getJwtToken();
-      } catch (e) {
-        window.alert(e.message);
+      if (!token) {
+        window.alert('請登入會員');
         return;
       }
-    }
-    window.localStorage.setItem('jwtToken', jwtToken);
 
-    if (cartItems.length === 0) {
-      window.alert('尚未選購商品');
-      return;
-    }
-
-    if (Object.values(recipient).some((value) => !value)) {
-      window.alert('請填寫完整訂購資料');
-      return;
-    }
-
-    if (!tappay.canGetPrime()) {
-      window.alert('付款資料輸入有誤');
-      return;
-    }
-
-    const result = await tappay.getPrime();
-    if (result.status !== 0) {
-      window.alert('付款資料輸入有誤');
-      return;
-    }
-
-    const { data } = await api.checkout(
-      {
-        prime: result.card.prime,
-        order: {
-          shipping: 'delivery',
-          payment: 'credit_card',
-          subtotal,
-          freight,
-          total: subtotal + freight,
-          recipient,
-          list: cartItems,
+      if (cartItems.length === 0) {
+        window.alert('尚未選購商品');
+        return;
+      }
+  
+      if (Object.values(recipient).some((value) => !value)) {
+        window.alert('請填寫完整訂購資料');
+        return;
+      }
+  
+      if (!tappay.canGetPrime()) {
+        window.alert('付款資料輸入有誤');
+        return;
+      }
+  
+      const result = await tappay.getPrime();
+      if (result.status !== 0) {
+        window.alert('付款資料輸入有誤');
+        return;
+      }
+  
+      const { data } = await api.checkout(
+        {
+          prime: result.card.prime,
+          order: {
+            shipping: 'delivery',
+            payment: 'credit_card',
+            subtotal,
+            freight,
+            total: subtotal + freight,
+            recipient,
+            list: cartItems,
+          },
         },
-      },
-      jwtToken
-    );
-    window.alert('付款成功');
-    setCartItems([]);
-    navigate('/thankyou', { state: { orderNumber: data.number } });
+        token
+      );
+      window.alert('付款成功');
+      setCartItems([]);
+      navigate('/thankyou', { state: { orderNumber: data.number } });
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   return (

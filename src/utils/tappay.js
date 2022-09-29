@@ -10,8 +10,8 @@ function insertTappayScript() {
     const tappayScriptTag = document.createElement('script');
     tappayScriptTag.setAttribute('id', TAPPAY_SCRIPT_ID);
     tappayScriptTag.setAttribute('src', TAPPAY_SCRIPT_SRC);
+    tappayScriptTag.addEventListener('load', resolve);
     document.head.appendChild(tappayScriptTag);
-    tappayScriptTag.addEventListener('onload', resolve);
   });
 }
 
