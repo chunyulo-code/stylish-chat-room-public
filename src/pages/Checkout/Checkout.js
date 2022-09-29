@@ -138,7 +138,7 @@ const FormControl = styled.input`
   width: 574px;
   height: 30px;
   border-radius: 8px;
-  border: solid 1px #979797;
+  border: solid 1px ${({ invalid }) => invalid ? '#CB4042' : '#979797'};
 
   @media screen and (max-width: 1279px) {
     margin-top: 10px;
@@ -287,11 +287,13 @@ function Checkout() {
     address: '',
     time: '',
   });
+  const [invalidFields, setInvalidFields] = useState([]);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const cardNumberRef = useRef();
   const cardExpirationDateRef = useRef();
   const cardCCVRef = useRef();
+  const formRef = useRef();
 
   const { jwtToken, isLogin, login } = useContext(AuthContext);
   const { cartItems, setCartItems } = useContext(CartContext);
@@ -333,6 +335,11 @@ function Checkout() {
   
       if (Object.values(recipient).some((value) => !value)) {
         window.alert('請填寫完整訂購資料');
+        setInvalidFields(Object.keys(recipient).filter(key => !recipient[key]))
+        formRef.current.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+        });
         return;
       }
   
@@ -390,7 +397,7 @@ function Checkout() {
         <br />● 選擇宅配-請填寫正確收件人資訊，避免包裹配送不達
         <br />● 選擇超商-請填寫正確收件人姓名(與證件相符)，避免無法領取
       </Note>
-      <form>
+      <form ref={formRef}>
         <FormFieldSet>
           <FormLegend>訂購資料</FormLegend>
           {formInputs.map((input) => (
@@ -401,6 +408,7 @@ function Checkout() {
                 onChange={(e) =>
                   setRecipient({ ...recipient, [input.key]: e.target.value })
                 }
+                invalid={invalidFields.includes(input.key)}
               />
               {input.text && <FormText>{input.text}</FormText>}
             </FormGroup>
