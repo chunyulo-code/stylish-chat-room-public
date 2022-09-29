@@ -1,5 +1,23 @@
+const TAPPAY_SCRIPT_ID = 'tappay-sdk';
+const TAPPAY_SCRIPT_SRC = 'https://js.tappaysdk.com/tpdirect/v5.8.0';
+
+function insertTappayScript() {
+  return new Promise((resolve) => {
+    if (document.getElementById(TAPPAY_SCRIPT_ID)) {
+      resolve();
+      return;
+    };
+    const tappayScriptTag = document.createElement('script');
+    tappayScriptTag.setAttribute('id', TAPPAY_SCRIPT_ID);
+    tappayScriptTag.setAttribute('src', TAPPAY_SCRIPT_SRC);
+    document.head.appendChild(tappayScriptTag);
+    tappayScriptTag.addEventListener('onload', resolve);
+  });
+}
+
 const tappay = {
-  setupSDK() {
+  setupSDK: async () => {
+    await insertTappayScript();
     window.TPDirect.setupSDK(
       process.env.REACT_APP_TAPPAY_ID,
       process.env.REACT_APP_TAPPAY_KEY,

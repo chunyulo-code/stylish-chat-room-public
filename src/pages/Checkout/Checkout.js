@@ -315,12 +315,15 @@ function Checkout() {
   const cardCCVRef = useRef();
 
   useEffect(() => {
-    tappay.setupSDK();
-    tappay.setupCard(
-      cardNumberRef.current,
-      cardExpirationDateRef.current,
-      cardCCVRef.current
-    );
+    const setupTappay = async () => {
+      await tappay.setupSDK();
+      tappay.setupCard(
+        cardNumberRef.current,
+        cardExpirationDateRef.current,
+        cardCCVRef.current
+      );
+    }
+    setupTappay();
   }, []);
 
   const subtotal = cartItems.reduce(
