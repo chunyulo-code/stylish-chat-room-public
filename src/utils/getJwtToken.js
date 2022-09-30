@@ -2,8 +2,7 @@ import api from './api';
 import fb from './fb';
 
 async function getJwtToken() {
-  await fb.loadScript();
-  fb.init();
+  await fb.init();
   const response = await fb.getLoginStatus();
   let accessToken;
   if (response.status === 'connected') {

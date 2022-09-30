@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useContext } from 'react';
 import styled from 'styled-components';
+import ReactLoading from 'react-loading';
 
-import api from '../../utils/api';
-import getJwtToken from '../../utils/getJwtToken';
+import { AuthContext } from '../../context/authContext';
 
 const Wrapper = styled.div`
   padding: 60px 20px;
@@ -31,44 +31,35 @@ const LogoutButton = styled.button`
   margin-top: 24px;
 `;
 
+const Loading = styled(ReactLoading)`
+  margin-top: 50px;
+`;
+
 function Profile() {
-  const [profile, setProfile] = useState();
+  const { user, isLogin, login, logout, loading } = useContext(AuthContext);
 
-  useEffect(() => {
-    async function getProfile() {
-      let jwtToken = window.localStorage.getItem('jwtToken');
-
-      if (!jwtToken) {
-        try {
-          jwtToken = await getJwtToken();
-        } catch (e) {
-          window.alert(e.message);
-          return;
-        }
-      }
-      window.localStorage.setItem('jwtToken', jwtToken);
-
-      const { data } = await api.getProfile(jwtToken);
-      setProfile(data);
-    }
-    getProfile();
-  }, []);
-
+  const renderContent = () => {
+    if (loading) return <Loading type="spinningBubbles" color="#313538" />;
+    if (isLogin) return (
+      <>
+        <Photo src={user.picture} />
+        <Content>{user.name}</Content>
+        <Content>{user.email}</Content>
+        <LogoutButton
+          onClick={logout}
+        >
+          登出
+        </LogoutButton>
+      </>
+    );
+    return (
+      <LogoutButton onClick={login}>登入</LogoutButton>
+    );
+  }
   return (
     <Wrapper>
       <Title>會員基本資訊</Title>
-      {profile && (
-        <>
-          <Photo src={profile.picture} />
-          <Content>{profile.name}</Content>
-          <Content>{profile.email}</Content>
-          <LogoutButton
-            onClick={() => window.localStorage.removeItem('jwtToken')}
-          >
-            登出
-          </LogoutButton>
-        </>
-      )}
+      {renderContent()}
     </Wrapper>
   );
 }

@@ -1,7 +1,8 @@
-import { useOutletContext } from 'react-router-dom';
+import { useContext } from 'react';
 import styled from 'styled-components';
 
 import trash from './trash.png';
+import { CartContext } from '../../context/cartContext';
 
 const Header = styled.div`
   display: flex;
@@ -210,7 +211,7 @@ const DeleteButton = styled.div`
 `;
 
 function Cart() {
-  const [cartItems, setCartItems] = useOutletContext();
+  const { cartItems, setCartItems } = useContext(CartContext);
 
   function changeItemQuantity(itemIndex, itemQuantity) {
     const newCartItems = cartItems.map((item, index) =>
@@ -222,14 +223,12 @@ function Cart() {
         : item
     );
     setCartItems(newCartItems);
-    window.localStorage.setItem('cartItems', JSON.stringify(newCartItems));
     window.alert('已修改數量');
   }
 
   function deleteItem(itemIndex) {
     const newCartItems = cartItems.filter((_, index) => index !== itemIndex);
     setCartItems(newCartItems);
-    window.localStorage.setItem('cartItems', JSON.stringify(newCartItems));
     window.alert('已刪除商品');
   }
 

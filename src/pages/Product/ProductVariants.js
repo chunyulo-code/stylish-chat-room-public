@@ -1,9 +1,9 @@
-import { useState } from 'react';
-import { useOutletContext } from 'react-router-dom';
+import { useState, useContext } from 'react';
 import styled from 'styled-components';
 
 import add from './add.png';
 import minus from './minus.png';
+import { CartContext } from '../../context/cartContext';
 
 const Option = styled.div`
   display: flex;
@@ -124,7 +124,7 @@ function ProductVariants({ product }) {
   );
   const [selectedSize, setSelectedSize] = useState();
   const [quantity, setQuantity] = useState(1);
-  const [cartItems, setCartItems] = useOutletContext();
+  const { cartItems, setCartItems } = useContext(CartContext);
 
   function getStock(colorCode, size) {
     return product.variants.find(
@@ -152,7 +152,6 @@ function ProductVariants({ product }) {
       },
     ];
     setCartItems(newCartItems);
-    window.localStorage.setItem('cartItems', JSON.stringify(newCartItems));
     window.alert('已加入商品');
   }
   return (

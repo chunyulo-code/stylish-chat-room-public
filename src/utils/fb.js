@@ -1,26 +1,27 @@
+const FB_SCRIPT_ID = 'facebook-jssdk';
+const FB_SCRIPT_SRC = 'https://connect.facebook.net/zh_TW/sdk.js';
+
+function insertFBScript() {
+  if (document.getElementById(FB_SCRIPT_ID)) return;
+  const fbScriptTag = document.createElement('script');
+  fbScriptTag.setAttribute('id', FB_SCRIPT_ID);
+  fbScriptTag.setAttribute('src', FB_SCRIPT_SRC);
+  document.head.appendChild(fbScriptTag);
+}
+
 const fb = {
-  loadScript() {
+  init() {
     return new Promise((resolve) => {
       window.fbAsyncInit = () => {
+        window.FB.init({
+          appId: process.env.REACT_APP_FACEBOOK_ID,
+          cookie: true,
+          xfbml: true,
+          version: 'v10.0',
+        });
         resolve();
       };
-      (function (d, s, id) {
-        var js,
-          fjs = d.getElementsByTagName(s)[0];
-        if (d.getElementById(id)) return;
-        js = d.createElement(s);
-        js.id = id;
-        js.src = 'https://connect.facebook.net/zh_TW/sdk.js';
-        fjs.parentNode.insertBefore(js, fjs);
-      })(document, 'script', 'facebook-jssdk');
-    });
-  },
-  init() {
-    window.FB.init({
-      appId: '700590737403665',
-      cookie: true,
-      xfbml: true,
-      version: 'v10.0',
+      insertFBScript();
     });
   },
   getLoginStatus() {

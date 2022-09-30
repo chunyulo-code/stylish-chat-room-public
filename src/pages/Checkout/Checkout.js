@@ -1,10 +1,12 @@
-import { useEffect, useRef, useState } from 'react';
-import { useNavigate, useOutletContext } from 'react-router-dom';
+import { useEffect, useRef, useState, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import api from '../../utils/api';
-import getJwtToken from '../../utils/getJwtToken';
 import tappay from '../../utils/tappay';
+import { AuthContext } from '../../context/authContext';
+import { CartContext } from '../../context/cartContext';
+import Button from '../../components/Button';
 import Cart from './Cart';
 
 const Wrapper = styled.div`
@@ -136,7 +138,7 @@ const FormControl = styled.input`
   width: 574px;
   height: 30px;
   border-radius: 8px;
-  border: solid 1px #979797;
+  border: solid 1px ${({ invalid }) => invalid ? '#CB4042' : '#979797'};
 
   @media screen and (max-width: 1279px) {
     margin-top: 10px;
@@ -251,29 +253,6 @@ const PriceValue = styled.div`
   color: #3f3a3a;
 `;
 
-const CheckoutButton = styled.button`
-  width: 240px;
-  height: 60px;
-  margin-top: 50px;
-  border: solid 1px #979797;
-  background-color: black;
-  color: white;
-  font-size: 20px;
-  letter-spacing: 4px;
-  margin-left: auto;
-  display: block;
-  cursor: pointer;
-
-  @media screen and (max-width: 1279px) {
-    width: 100%;
-    height: 44px;
-    margin-top: 36px;
-    border: solid 1px black;
-    font-size: 16px;
-    letter-spacing: 3.2px;
-  }
-`;
-
 const formInputs = [
   {
     label: '收件人姓名',
@@ -308,19 +287,27 @@ function Checkout() {
     address: '',
     time: '',
   });
-  const [cartItems, setCartItems] = useOutletContext();
+  const [invalidFields, setInvalidFields] = useState([]);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const cardNumberRef = useRef();
   const cardExpirationDateRef = useRef();
   const cardCCVRef = useRef();
+  const formRef = useRef();
+
+  const { jwtToken, isLogin, login } = useContext(AuthContext);
+  const { cartItems, setCartItems } = useContext(CartContext);
 
   useEffect(() => {
-    tappay.setupSDK();
-    tappay.setupCard(
-      cardNumberRef.current,
-      cardExpirationDateRef.current,
-      cardCCVRef.current
-    );
+    const setupTappay = async () => {
+      await tappay.setupSDK();
+      tappay.setupCard(
+        cardNumberRef.current,
+        cardExpirationDateRef.current,
+        cardCCVRef.current
+      );
+    }
+    setupTappay();
   }, []);
 
   const subtotal = cartItems.reduce(
@@ -331,57 +318,65 @@ function Checkout() {
   const freight = 30;
 
   async function checkout() {
-    let jwtToken = window.localStorage.getItem('jwtToken');
+    try {
+      setLoading(true);      
 
-    if (!jwtToken) {
-      try {
-        jwtToken = await getJwtToken();
-      } catch (e) {
-        window.alert(e.message);
+      const token = isLogin ? jwtToken : await login();
+
+      if (!token) {
+        window.alert('請登入會員');
         return;
       }
-    }
-    window.localStorage.setItem('jwtToken', jwtToken);
 
-    if (cartItems.length === 0) {
-      window.alert('尚未選購商品');
-      return;
-    }
-
-    if (Object.values(recipient).some((value) => !value)) {
-      window.alert('請填寫完整訂購資料');
-      return;
-    }
-
-    if (!tappay.canGetPrime()) {
-      window.alert('付款資料輸入有誤');
-      return;
-    }
-
-    const result = await tappay.getPrime();
-    if (result.status !== 0) {
-      window.alert('付款資料輸入有誤');
-      return;
-    }
-
-    const { data } = await api.checkout(
-      {
-        prime: result.card.prime,
-        order: {
-          shipping: 'delivery',
-          payment: 'credit_card',
-          subtotal,
-          freight,
-          total: subtotal + freight,
-          recipient,
-          list: cartItems,
+      if (cartItems.length === 0) {
+        window.alert('尚未選購商品');
+        return;
+      }
+  
+      if (Object.values(recipient).some((value) => !value)) {
+        window.alert('請填寫完整訂購資料');
+        setInvalidFields(Object.keys(recipient).filter(key => !recipient[key]))
+        formRef.current.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+        });
+        return;
+      }
+  
+      if (!tappay.canGetPrime()) {
+        window.alert('付款資料輸入有誤');
+        return;
+      }
+  
+      const result = await tappay.getPrime();
+      if (result.status !== 0) {
+        window.alert('付款資料輸入有誤');
+        return;
+      }
+  
+      const { data } = await api.checkout(
+        {
+          prime: result.card.prime,
+          order: {
+            shipping: 'delivery',
+            payment: 'credit_card',
+            subtotal,
+            freight,
+            total: subtotal + freight,
+            recipient,
+            list: cartItems,
+          },
         },
-      },
-      jwtToken
-    );
-    window.alert('付款成功');
-    setCartItems([]);
-    navigate('/thankyou', { state: { orderNumber: data.number } });
+        token
+      );
+      window.alert('付款成功');
+      setCartItems([]);
+      navigate('/thankyou', { state: { orderNumber: data.number } });
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -402,7 +397,7 @@ function Checkout() {
         <br />● 選擇宅配-請填寫正確收件人資訊，避免包裹配送不達
         <br />● 選擇超商-請填寫正確收件人姓名(與證件相符)，避免無法領取
       </Note>
-      <form>
+      <form ref={formRef}>
         <FormFieldSet>
           <FormLegend>訂購資料</FormLegend>
           {formInputs.map((input) => (
@@ -413,6 +408,7 @@ function Checkout() {
                 onChange={(e) =>
                   setRecipient({ ...recipient, [input.key]: e.target.value })
                 }
+                invalid={invalidFields.includes(input.key)}
               />
               {input.text && <FormText>{input.text}</FormText>}
             </FormGroup>
@@ -465,7 +461,7 @@ function Checkout() {
         <Currency>NT.</Currency>
         <PriceValue>{subtotal + freight}</PriceValue>
       </TotalPrice>
-      <CheckoutButton onClick={checkout}>確認付款</CheckoutButton>
+      <Button loading={loading} onClick={checkout}>確認付款</Button>
     </Wrapper>
   );
 }
