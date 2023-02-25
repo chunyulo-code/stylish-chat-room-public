@@ -107,7 +107,7 @@ const AddToCart = styled.button`
   font-size: 20px;
   letter-spacing: 4px;
   color: white;
-  cursor: pointer;
+  cursor: ${(props) => (props.$isDisabled ? ' not-allowed' : 'pointer')};
 
   @media screen and (max-width: 1279px) {
     height: 44px;
@@ -119,41 +119,84 @@ const AddToCart = styled.button`
 `;
 
 function ProductVariants({ product }) {
-  const [selectedColorCode, setSelectedColorCode] = useState(
-    product.colors[0].code
-  );
+  const [selectedColorCode, setSelectedColorCode] = useState();
   const [selectedSize, setSelectedSize] = useState();
-  const [quantity, setQuantity] = useState(1);
+  const [quantity, setQuantity] = useState(0);
   const { cartItems, setCartItems } = useContext(CartContext);
 
   function getStock(colorCode, size) {
-    return product.variants.find(
+    const stock = product.variants.find(
       (variant) => variant.color_code === colorCode && variant.size === size
     ).stock;
+    const quantity =
+      cartItems.find(
+        (item) => item.color.code === colorCode && item.size === size
+      )?.qty || 0;
+    return stock - quantity;
   }
 
-  function addToCart() {
-    if (!selectedSize) {
-      window.alert('請選擇尺寸');
-      return;
+  function renderAddToCartButton() {
+    let buttonText;
+    let isDisabled;
+    if (!selectedColorCode) {
+      buttonText = '請選擇顏色';
+      isDisabled = true;
+    } else if (!selectedSize) {
+      buttonText = '請選擇尺寸';
+      isDisabled = true;
+    } else if (quantity === 0) {
+      buttonText = '請選擇數量';
+      isDisabled = true;
+    } else {
+      buttonText = '加入購物車';
+      isDisabled = false;
     }
 
-    const newCartItems = [
-      ...cartItems,
-      {
-        color: product.colors.find((color) => color.code === selectedColorCode),
-        id: product.id,
-        image: product.main_image,
-        name: product.title,
-        price: product.price,
-        qty: quantity,
-        size: selectedSize,
-        stock: getStock(selectedColorCode, selectedSize),
-      },
-    ];
-    setCartItems(newCartItems);
-    window.alert('已加入商品');
+    return (
+      <AddToCart
+        $isDisabled={isDisabled}
+        onClick={() => {
+          if (isDisabled) return;
+          let newCartItems;
+          const index = cartItems.findIndex(
+            (item) =>
+              item.color.code === selectedColorCode &&
+              item.size === selectedSize
+          );
+          if (index > -1) {
+            newCartItems = cartItems.map((item) => ({
+              ...item,
+              qty: item.qty + quantity
+            }));
+          } else {
+            newCartItems = [
+              ...cartItems,
+              {
+                color: product.colors.find(
+                  (color) => color.code === selectedColorCode
+                ),
+                id: product.id,
+                image: product.main_image,
+                name: product.title,
+                price: product.price,
+                qty: quantity,
+                size: selectedSize,
+                stock: getStock(selectedColorCode, selectedSize)
+              }
+            ];
+          }
+          setCartItems(newCartItems);
+          setSelectedColorCode();
+          setSelectedSize();
+          setQuantity(0);
+          window.alert('已加入商品');
+        }}
+      >
+        {buttonText}
+      </AddToCart>
+    );
   }
+
   return (
     <>
       <Option>
@@ -166,7 +209,7 @@ function ProductVariants({ product }) {
             onClick={() => {
               setSelectedColorCode(color.code);
               setSelectedSize();
-              setQuantity(1);
+              setQuantity(0);
             }}
           />
         ))}
@@ -174,17 +217,17 @@ function ProductVariants({ product }) {
       <Option>
         <OptionName>尺寸｜</OptionName>
         {product.sizes.map((size) => {
-          const stock = getStock(selectedColorCode, size);
+          const isDisabled =
+            !selectedColorCode || getStock(selectedColorCode, size) === 0;
           return (
             <Size
               key={size}
               $isSelected={size === selectedSize}
-              $isDisabled={stock === 0}
+              $isDisabled={isDisabled}
               onClick={() => {
-                const stock = getStock(selectedColorCode, size);
-                if (stock === 0) return;
+                if (isDisabled) return;
                 setSelectedSize(size);
-                if (stock < quantity) setQuantity(1);
+                setQuantity(0);
               }}
             >
               {size}
@@ -211,9 +254,7 @@ function ProductVariants({ product }) {
           />
         </QuantitySelector>
       </Option>
-      <AddToCart onClick={addToCart}>
-        {selectedSize ? '加入購物車' : '請選擇尺寸'}
-      </AddToCart>
+      {renderAddToCartButton()}
     </>
   );
 }

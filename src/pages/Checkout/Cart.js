@@ -218,7 +218,7 @@ function Cart() {
       index === itemIndex
         ? {
             ...item,
-            qty: itemQuantity,
+            qty: itemQuantity
           }
         : item
     );
@@ -235,7 +235,7 @@ function Cart() {
   return (
     <>
       <Header>
-        <ItemCount>購物車({cartItems.length})</ItemCount>
+        <ItemCount>購物車</ItemCount>
         <Quantity hideOnMobile>數量</Quantity>
         <UnitPrice hideOnMobile>單價</UnitPrice>
         <Price hideOnMobile>小計</Price>

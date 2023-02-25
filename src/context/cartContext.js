@@ -15,11 +15,16 @@ export const CartContextProvider = ({ children }) => {
     _setCartItems(newItems);
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(newItems));
   };
+  const cartCount = cartItems.reduce((total, item) => total + item.qty, 0);
   return (
     <CartContext.Provider
-      value={{ cartItems, setCartItems, cartCount: cartItems.length }}
+      value={{
+        cartItems,
+        setCartItems,
+        cartCount
+      }}
     >
       {children}
     </CartContext.Provider>
-  )
-}
+  );
+};
