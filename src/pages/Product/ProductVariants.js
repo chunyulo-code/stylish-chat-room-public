@@ -1,9 +1,8 @@
-import { useState, useContext } from 'react';
+import { useContext, useState } from 'react';
 import styled from 'styled-components';
-
+import { CartContext } from '../../context/cartContext';
 import add from './add.png';
 import minus from './minus.png';
-import { CartContext } from '../../context/cartContext';
 
 const Option = styled.div`
   display: flex;
@@ -119,41 +118,87 @@ const AddToCart = styled.button`
 `;
 
 function ProductVariants({ product }) {
-  const [selectedColorCode, setSelectedColorCode] = useState(
-    product.colors[0].code
-  );
+  const [selectedColorCode, setSelectedColorCode] = useState();
   const [selectedSize, setSelectedSize] = useState();
-  const [quantity, setQuantity] = useState(1);
+  const [quantity, setQuantity] = useState(0);
   const { cartItems, setCartItems } = useContext(CartContext);
 
   function getStock(colorCode, size) {
-    return product.variants.find(
-      (variant) => variant.color_code === colorCode && variant.size === size
-    ).stock;
+    if (!colorCode || !size) return 0;
+    const qty =
+      cartItems.find(
+        (item) =>
+          item.id === product.id &&
+          item.color.code === colorCode &&
+          item.size === size
+      )?.qty || 0;
+    return (
+      product.variants.find(
+        (variant) => variant.color_code === colorCode && variant.size === size
+      ).stock - qty
+    );
   }
 
   function addToCart() {
+    if (!selectedColorCode) {
+      window.alert('請選擇顏色');
+      return;
+    }
     if (!selectedSize) {
       window.alert('請選擇尺寸');
       return;
     }
+    if (quantity === 0) {
+      window.alert('請選擇數量');
+      return;
+    }
 
-    const newCartItems = [
-      ...cartItems,
-      {
-        color: product.colors.find((color) => color.code === selectedColorCode),
-        id: product.id,
-        image: product.main_image,
-        name: product.title,
-        price: product.price,
-        qty: quantity,
-        size: selectedSize,
-        stock: getStock(selectedColorCode, selectedSize),
-      },
-    ];
+    const index = cartItems.findIndex(
+      (item) =>
+        item.id === product.id &&
+        item.color.code === selectedColorCode &&
+        item.size === selectedSize
+    );
+    const newCartItems =
+      index !== -1
+        ? cartItems.map((item, i) => {
+            if (i === index) {
+              return {
+                ...item,
+                qty: item.qty + quantity,
+              };
+            }
+            return item;
+          })
+        : [
+            ...cartItems,
+            {
+              color: product.colors.find(
+                (color) => color.code === selectedColorCode
+              ),
+              id: product.id,
+              image: product.main_image,
+              name: product.title,
+              price: product.price,
+              qty: quantity,
+              size: selectedSize,
+              stock: getStock(selectedColorCode, selectedSize),
+            },
+          ];
     setCartItems(newCartItems);
+    setSelectedColorCode();
+    setSelectedSize();
+    setQuantity(0);
     window.alert('已加入商品');
   }
+
+  function addToCartButtonText() {
+    if (!selectedColorCode) return '請選擇顏色';
+    if (!selectedSize) return '請選擇尺寸';
+    if (quantity === 0) return '請選擇數量';
+    return '加入購物車';
+  }
+
   return (
     <>
       <Option>
@@ -166,7 +211,7 @@ function ProductVariants({ product }) {
             onClick={() => {
               setSelectedColorCode(color.code);
               setSelectedSize();
-              setQuantity(1);
+              setQuantity(0);
             }}
           />
         ))}
@@ -181,10 +226,9 @@ function ProductVariants({ product }) {
               $isSelected={size === selectedSize}
               $isDisabled={stock === 0}
               onClick={() => {
-                const stock = getStock(selectedColorCode, size);
                 if (stock === 0) return;
                 setSelectedSize(size);
-                if (stock < quantity) setQuantity(1);
+                setQuantity(0);
               }}
             >
               {size}
@@ -197,7 +241,7 @@ function ProductVariants({ product }) {
         <QuantitySelector>
           <DecrementButton
             onClick={() => {
-              if (!selectedSize || quantity === 1) return;
+              if (!selectedSize || quantity === 0) return;
               setQuantity(quantity - 1);
             }}
           />
@@ -211,9 +255,7 @@ function ProductVariants({ product }) {
           />
         </QuantitySelector>
       </Option>
-      <AddToCart onClick={addToCart}>
-        {selectedSize ? '加入購物車' : '請選擇尺寸'}
-      </AddToCart>
+      <AddToCart onClick={addToCart}>{addToCartButtonText()}</AddToCart>
     </>
   );
 }
