@@ -2,7 +2,7 @@ import { createContext, useState } from 'react';
 
 export const CartContext = createContext({
   cartItems: [],
-  setCartItems: () => {}
+  setCartItems: () => {},
 });
 
 const STORAGE_KEY = 'cartItems';
@@ -17,9 +17,13 @@ export const CartContextProvider = ({ children }) => {
   };
   return (
     <CartContext.Provider
-      value={{ cartItems, setCartItems, cartCount: cartItems.length }}
+      value={{
+        cartItems,
+        setCartItems,
+        cartCount: cartItems.reduce((total, item) => total + item.qty, 0),
+      }}
     >
       {children}
     </CartContext.Provider>
-  )
-}
+  );
+};
