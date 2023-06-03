@@ -9,6 +9,7 @@ import ThankYou from "./pages/ThankYou/ThankYou";
 import Product from "./pages/Product/Product";
 import Profile from "./pages/Profile/Profile";
 import ChatRoomSocket from "./pages/ChatRoom/ChatRoomSocket";
+import ChatAdmin from "./pages/ChatRoom/ChatAdmin";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -21,6 +22,7 @@ root.render(
         <Route path="checkout" element={<Checkout />} />
         <Route path="thankyou" element={<ThankYou />} />
         <Route path="profile" element={<Profile />} />
+        <Route path="chatAdmin" element={<ChatAdmin />} />
         <Route path="chatroomsocket" element={<ChatRoomSocket />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Route>
