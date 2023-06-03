@@ -1,3 +1,7 @@
 export default function ChatUser() {
-  return <></>;
+  return (
+    <>
+      <h1>ChatUser</h1>
+    </>
+  );
 }
