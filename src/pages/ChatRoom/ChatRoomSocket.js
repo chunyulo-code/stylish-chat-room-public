@@ -11,6 +11,7 @@ export default function ChatRoom() {
 
   const sendMessage = () => {
     socket.emit("send_message", { randomName, msg, room });
+    setAllMsg((prev) => [...prev, `${randomName}: ${msg}`]);
     setMsg("");
   };
 
@@ -20,14 +21,18 @@ export default function ChatRoom() {
 
   useEffect(() => {
     socket.on("receive_message", (data) => {
-      setAllMsg([...allMsg, `${data.randomName}: ${data.msg}`]);
+      setAllMsg((prev) => [...prev, `${data.randomName}: ${data.msg}`]);
     });
-  }, [socket]);
+  }, []);
+
+  console.log(allMsg);
 
   return (
     <div className="flex justify-center items-center">
       <div>
-        <h1 class="text-xl font-bold mb-6">Welcom to Chat-Room</h1>
+        <h1 class="text-xl font-bold mb-6 text-center mt-5">
+          Welcom to Chat-Room
+        </h1>
         <div className="flex items-center">
           <input
             placeholder="Room name..."
@@ -60,9 +65,15 @@ export default function ChatRoom() {
             Send Message
           </button>
         </div>
-        <div>User name: {randomName}</div>
-        <div>Room name: {room}</div>
-        <div className="mt-5">Messages: </div>
+        <div className="text-center mt-5 bg-black text-white py-2 rounded-md">
+          User name: {randomName}
+        </div>
+        <div className="text-center mt-5 bg-black text-white py-2 rounded-md">
+          Room name: {room}
+        </div>
+        <div className="mt-5 text-center text-lg bg-red-300 rounded-md text-white">
+          Messages
+        </div>
         <div className="mt-5">
           {allMsg.map((msg) => (
             <p>{msg}</p>
