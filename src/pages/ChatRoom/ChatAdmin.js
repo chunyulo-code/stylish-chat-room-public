@@ -5,7 +5,7 @@ import ChatWindow from "./ChatWindow";
 
 function ChatAdmin() {
   return (
-    <div className="h-full">
+    <div className="min-h-full w-full">
       <Split
         className="flex"
         sizes={[20, 80]}
