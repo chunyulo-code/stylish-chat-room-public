@@ -1,11 +1,12 @@
-import { Outlet } from 'react-router-dom';
-import { createGlobalStyle } from 'styled-components';
-import { Reset } from 'styled-reset';
+import { Outlet } from "react-router-dom";
+import styled, { createGlobalStyle } from "styled-components";
+import { Reset } from "styled-reset";
 
-import Footer from './components/Footer';
-import Header from './components/Header';
-import { AuthContextProvider } from './context/authContext';
-import { CartContextProvider } from './context/cartContext';
+import Footer from "./components/Footer";
+import Header from "./components/Header";
+import { AuthContextProvider } from "./context/authContext";
+import { CartContextProvider } from "./context/cartContext";
+import { ChatAdminContextProvider } from "./context/chatAdminContext";
 
 const GlobalStyle = createGlobalStyle`
   * {
@@ -20,6 +21,8 @@ const GlobalStyle = createGlobalStyle`
     min-height: 100vh;
     padding: 140px 0 115px;
     position: relative;
+    display: flex;
+    flex-direction: column;
 
     @media screen and (max-width: 1279px) {
       padding: 102px 0 208px;
@@ -34,9 +37,11 @@ function App() {
       <GlobalStyle />
       <AuthContextProvider>
         <CartContextProvider>
-          <Header />
-          <Outlet />
-          <Footer />
+          <ChatAdminContextProvider>
+            <Header />
+            <Outlet />
+            <Footer />
+          </ChatAdminContextProvider>
         </CartContextProvider>
       </AuthContextProvider>
     </>

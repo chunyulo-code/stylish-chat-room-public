@@ -8,8 +8,8 @@ import Home from "./pages/Home/Home";
 import ThankYou from "./pages/ThankYou/ThankYou";
 import Product from "./pages/Product/Product";
 import Profile from "./pages/Profile/Profile";
-import ChatRoomSocket from "./pages/ChatRoom/ChatRoomSocket";
-import ChatAdmin from "./pages/ChatRoom/ChatAdmin";
+import ChatRoomSocket from "./pages/ChatRoom/Admin/ChatRoomSocket";
+import ChatAdmin from "./pages/ChatRoom/Admin/ChatAdmin";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 

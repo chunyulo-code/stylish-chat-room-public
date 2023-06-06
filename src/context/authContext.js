@@ -1,19 +1,14 @@
-import {
-  createContext,
-  useState,
-  useEffect,
-  useCallback,
-} from 'react';
-import fb from '../utils/fb';
-import api from '../utils/api';
+import { createContext, useState, useEffect, useCallback } from "react";
+import fb from "../utils/fb";
+import api from "../utils/api";
 
 export const AuthContext = createContext({
   isLogin: false,
   user: {},
   loading: false,
-  jwtToken: '',
+  jwtToken: "",
   login: () => {},
-  logout: () => {},
+  logout: () => {}
 });
 
 export const AuthContextProvider = ({ children }) => {
@@ -25,13 +20,14 @@ export const AuthContextProvider = ({ children }) => {
   const handleLoginResponse = useCallback(async (response) => {
     const accessToken = response.authResponse.accessToken;
     const { data } = await api.signin({
-      provider: 'facebook',
-      access_token: accessToken,
+      provider: "facebook",
+      access_token: accessToken
     });
     const { access_token: tokenFromServer, user: userData } = data;
+    console.log(`tokenFromServer: ${tokenFromServer}`);
     setUser(userData);
     setJwtToken(tokenFromServer);
-    window.localStorage.setItem('jwtToken', tokenFromServer);
+    window.localStorage.setItem("jwtToken", tokenFromServer);
     setIsLogin(true);
     return tokenFromServer;
   }, []);
@@ -40,30 +36,30 @@ export const AuthContextProvider = ({ children }) => {
     const checkAuthStatus = async () => {
       await fb.init();
       const response = await fb.getLoginStatus();
-      if (response.status === 'connected') {
+      if (response.status === "connected") {
         handleLoginResponse(response);
         setLoading(false);
       } else {
-        window.localStorage.removeItem('jwtToken');
+        window.localStorage.removeItem("jwtToken");
         setLoading(false);
       }
-    }
+    };
     checkAuthStatus();
   }, [handleLoginResponse]);
 
   const login = async () => {
     setLoading(true);
     const response = await fb.login();
-    if (response.status === 'connected') {
+    if (response.status === "connected") {
       const tokenFromServer = handleLoginResponse(response);
       setLoading(false);
       return tokenFromServer;
     } else {
-      window.localStorage.removeItem('jwtToken');
+      window.localStorage.removeItem("jwtToken");
       setLoading(false);
       return null;
     }
-  }
+  };
 
   const logout = async () => {
     setLoading(true);
@@ -71,9 +67,9 @@ export const AuthContextProvider = ({ children }) => {
     setIsLogin(false);
     setUser({});
     setJwtToken();
-    window.localStorage.removeItem('jwtToken');
+    window.localStorage.removeItem("jwtToken");
     setLoading(false);
-  }
+  };
 
   return (
     <AuthContext.Provider
@@ -83,10 +79,10 @@ export const AuthContextProvider = ({ children }) => {
         loading,
         jwtToken,
         login,
-        logout,
+        logout
       }}
     >
       {children}
     </AuthContext.Provider>
   );
-}
+};

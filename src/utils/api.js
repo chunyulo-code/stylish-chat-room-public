@@ -1,5 +1,5 @@
 const api = {
-  hostname: "https://api.appworks-school.tw/api/1.0",
+  hostname: "https://ctceth.com/api/1.0",
   async getProducts(category, paging) {
     const response = await fetch(
       `${this.hostname}/products/${category}?paging=${paging}`
