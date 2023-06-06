@@ -3,7 +3,7 @@ import SidebarUser from "./SidebarUser";
 import { ChatAdminContext } from "../../../context/chatAdminContext";
 
 export default function Sidebar() {
-  const { setCurrentRoomId } = useContext(ChatAdminContext);
+  const { setCurrentRoomId, setIsSidebarLoaded } = useContext(ChatAdminContext);
   const [chats, setChats] = useState([]);
   const jwtToken = window.localStorage.getItem("jwtToken");
 
@@ -16,10 +16,11 @@ export default function Sidebar() {
     })
       .then((data) => data.json())
       .then((jsonData) => {
-        setChats(jsonData);
-        console.log(jsonData);
-        setCurrentRoomId(jsonData[0].chat_room_id);
-      });
+        setChats(jsonData.data);
+        console.log(jsonData.data);
+        setCurrentRoomId(jsonData.data[0].chat_room_id);
+      })
+      .then(setIsSidebarLoaded(true));
   }, []);
 
   return (
@@ -29,6 +30,7 @@ export default function Sidebar() {
           picture={chat.picture}
           name={chat.name}
           chatRoomId={chat.chat_room_id}
+          key={chat.chat_room_id}
         ></SidebarUser>
       ))}
     </div>

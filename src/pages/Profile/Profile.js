@@ -21,6 +21,10 @@ const Title = styled.div`
 
 const Photo = styled.img`
   margin-top: 24px;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
 `;
 
 const Content = styled.div`

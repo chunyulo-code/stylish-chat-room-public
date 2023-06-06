@@ -12,7 +12,7 @@ export default function TextArea({ setChatHistory, scrollToBottom }) {
   const sendHandler = () => {
     const data = {
       message: incomingMsg,
-      sender_id: 0,
+      sender_id: 40,
       time_stamp: Date.now(),
       chat_room_id: currentRoomId
     };
@@ -25,6 +25,7 @@ export default function TextArea({ setChatHistory, scrollToBottom }) {
 
   useEffect(() => {
     socket.on("chat message", (data) => {
+      console.log("有訊息進來嗎");
       setChatHistory((prev) => [...prev, data]);
     });
   }, [socket]);

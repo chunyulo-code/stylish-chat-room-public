@@ -3,16 +3,13 @@ import { createContext, useState } from "react";
 export const ChatAdminContext = createContext({
   currentRoomId: null,
   isLoadingSidebar: false,
-  isLoadingWindow: false,
   setIsLoadingSidebar: () => {},
-  setIsLoadingWindow: () => {},
   setCurrentRoomId: () => {},
   timeFormatter: () => {}
 });
 
 export const ChatAdminContextProvider = ({ children }) => {
-  const [isLoadingSidebar, setIsLoadingSidebar] = useState(false);
-  const [isLoadingWindow, setIsLoadingWindow] = useState(false);
+  const [isSidebarLoaded, setIsSidebarLoaded] = useState(false);
   const [currentRoomId, setCurrentRoomId] = useState(null);
 
   function timeFormatter(timestamp) {
@@ -38,10 +35,8 @@ export const ChatAdminContextProvider = ({ children }) => {
         currentRoomId,
         setCurrentRoomId,
         timeFormatter,
-        isLoadingSidebar,
-        setIsLoadingSidebar,
-        isLoadingWindow,
-        setIsLoadingWindow
+        isSidebarLoaded,
+        setIsSidebarLoaded
       }}
     >
       {children}

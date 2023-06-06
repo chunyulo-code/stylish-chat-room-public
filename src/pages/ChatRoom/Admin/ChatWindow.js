@@ -6,31 +6,32 @@ import { ChatAdminContext } from "../../../context/chatAdminContext";
 
 export default function ChatWindow() {
   const [chatHistoty, setChatHistory] = useState([]);
-  const { currentUserId } = useContext(ChatAdminContext);
-  const msgContainer = useRef(null);
+  const { currentRoomId, isSidebarLoaded, setIsSidebarLoaded } =
+    useContext(ChatAdminContext);
   const jwtToken = window.localStorage.getItem("jwtToken");
-  console.log(currentUserId);
+  console.log(currentRoomId);
 
   useEffect(() => {
-    fetch("https://ctceth.com/api/1.0/chatroom/history", {
+    if (!currentRoomId) return;
+    fetch(`https://ctceth.com/api/1.0/chatroom/history/${currentRoomId}`, {
       headers: new Headers({
         "Content-Type": "application/json",
-        Authorization: `Bearer ${jwtToken}`,
-        user_id: currentUserId
+        Authorization: `Bearer ${jwtToken}`
       })
     })
       .then((data) => data.json())
       .then((jsonData) => {
         setChatHistory(jsonData.data);
         console.log("Fetch chatroom history again");
+        console.log(jsonData.data);
       });
-  }, [currentUserId]);
+  }, [currentRoomId]);
 
   return (
-    chatHistoty && (
-      <div className="px-[40px] pb-[100px] pt-[40px]">
-        {chatHistoty.map((msg) => {
-          if (msg.sender_id === 0)
+    <div className="px-[40px] pb-[100px] pt-[40px]">
+      {chatHistoty.length &&
+        chatHistoty.map((msg) => {
+          if (msg.sender_id === 40)
             return (
               <AdminMessage
                 img="https://picsum.photos/60"
@@ -46,8 +47,7 @@ export default function ChatWindow() {
             />
           );
         })}
-        <TextArea setChatHistory={setChatHistory} />
-      </div>
-    )
+      <TextArea setChatHistory={setChatHistory} />
+    </div>
   );
 }
