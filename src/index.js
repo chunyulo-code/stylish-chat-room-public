@@ -1,6 +1,6 @@
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
-import "../src/index.css";
+import "./index.css";
 
 import App from "./App";
 import Checkout from "./pages/Checkout/Checkout";
@@ -8,8 +8,8 @@ import Home from "./pages/Home/Home";
 import ThankYou from "./pages/ThankYou/ThankYou";
 import Product from "./pages/Product/Product";
 import Profile from "./pages/Profile/Profile";
-import ChatRoomSocket from "./pages/ChatRoom/Admin/ChatRoomSocket";
 import ChatAdmin from "./pages/ChatRoom/Admin/ChatAdmin";
+import ChatUser from "./pages/ChatRoom/ChatUser";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -23,7 +23,7 @@ root.render(
         <Route path="thankyou" element={<ThankYou />} />
         <Route path="profile" element={<Profile />} />
         <Route path="chatAdmin" element={<ChatAdmin />} />
-        <Route path="chatroomsocket" element={<ChatRoomSocket />} />
+        <Route path="chatuser" element={<ChatUser />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Route>
     </Routes>

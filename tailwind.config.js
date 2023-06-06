@@ -2,17 +2,16 @@
 module.exports = {
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
+    extend: {},
     screens: {
-      sm: "480px",
-      md: "768px",
-      lg: "1280px",
-      xl: "1440px"
-    },
-    extend: {
-      colors: {
-        "chatroom-light-gray": "#D9D9D9",
-        "chatroom-gray": "#3F3A3A"
-      }
+      xl: { max: "1280px" },
+      // => @media (max-width: 1280px) { ... }
+
+      lg: { max: "1279px" },
+      // => @media (max-width: 1279px) { ... }
+
+      md: { max: "480px" }
+      // => @media (max-width: 767px) { ... }
     }
   },
   plugins: []

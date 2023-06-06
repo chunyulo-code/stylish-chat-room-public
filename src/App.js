@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom";
-import styled, { createGlobalStyle } from "styled-components";
+import { createGlobalStyle } from "styled-components";
 import { Reset } from "styled-reset";
 
 import Footer from "./components/Footer";
@@ -15,6 +15,7 @@ const GlobalStyle = createGlobalStyle`
 
   body {
     font-family: 'Noto Sans TC', sans-serif;
+    color: #3F3A3A;
   }
 
   #root {

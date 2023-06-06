@@ -1,8 +1,10 @@
-import styled from 'styled-components';
+import styled from "styled-components";
+import { Link } from "react-router-dom";
 
-import line from './line.png';
-import facebook from './facebook.png';
-import twitter from './twitter.png';
+import line from "./line.png";
+import facebook from "./facebook.png";
+import twitter from "./twitter.png";
+import footerChatRoom from "./footer-chat-room.png";
 
 const Wrapper = styled.div`
   position: absolute;
@@ -63,12 +65,12 @@ const SiteLink = styled.div`
   }
 
   & + &::before {
-    content: '|';
+    content: "|";
     position: absolute;
     left: 0;
 
     @media screen and (max-width: 1279px) {
-      content: '';
+      content: "";
     }
   }
 `;
@@ -104,6 +106,19 @@ const SocialLink = styled.div`
   }
 `;
 
+const ChatRoomLink = styled(Link)`
+  display: none;
+  @media screen and (max-width: 1279px) {
+    display: block;
+    width: 20px;
+    height: 20px;
+    background-size: contain;
+    cursor: pointer;
+    background-image: url(${(props) => props.icon});
+    margin-left: 14px;
+  }
+`;
+
 const Copywright = styled.div`
   margin-left: 30px;
   line-height: 17px;
@@ -126,7 +141,7 @@ function Footer() {
     <Wrapper>
       <Content>
         <SiteLinks>
-          {['關於 Stylish', '服務條款', '隱私政策', '聯絡我們', 'FAQ'].map(
+          {["關於 Stylish", "服務條款", "隱私政策", "聯絡我們", "FAQ"].map(
             (text, index) => (
               <SiteLink key={index}>{text}</SiteLink>
             )
@@ -136,6 +151,7 @@ function Footer() {
           {[line, twitter, facebook].map((icon, index) => (
             <SocialLink key={index} icon={icon} />
           ))}
+          <ChatRoomLink to="/chatuser" icon={footerChatRoom} />
         </SocialLinks>
         <Copywright>© 2022. All rights reserved.</Copywright>
       </Content>
