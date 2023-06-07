@@ -40,7 +40,7 @@ export default function ChatWindow() {
   return (
     <div className="relative h-full px-[40px] pb-[100px] pt-[40px]">
       <div className="h-full  overflow-y-scroll" ref={msgContainer}>
-        {chatHistoty.length &&
+        {!!chatHistoty.length &&
           chatHistoty.map((msg, index) => {
             if (msg.sender_id === 40)
               return (

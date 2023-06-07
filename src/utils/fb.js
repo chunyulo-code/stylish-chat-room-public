@@ -14,7 +14,7 @@ const fb = {
     return new Promise((resolve) => {
       window.fbAsyncInit = () => {
         window.FB.init({
-          appId: process.env.REACT_APP_FACEBOOK_ID,
+          appId: process.env.REACT_APP_FACEBOOK_ID || 2710001569130006,
           cookie: true,
           xfbml: true,
           version: "v16.0"
