@@ -17,7 +17,7 @@ const fb = {
           appId: process.env.REACT_APP_FACEBOOK_ID,
           cookie: true,
           xfbml: true,
-          version: "v16.0"
+          version: "v16.0",
         });
         resolve();
       };

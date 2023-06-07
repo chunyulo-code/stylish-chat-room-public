@@ -25,9 +25,9 @@ const api = {
       body: JSON.stringify(data),
       headers: new Headers({
         "Content-Type": "application/json",
-        Authorization: `Bearer ${jwtToken}`
+        Authorization: `Bearer ${jwtToken}`,
       }),
-      method: "POST"
+      method: "POST",
     });
     return await response.json();
   },
@@ -35,9 +35,9 @@ const api = {
     const response = await fetch(`${this.hostname}/user/signin`, {
       body: JSON.stringify(data),
       headers: new Headers({
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       }),
-      method: "POST"
+      method: "POST",
     });
     return await response.json();
   },
@@ -45,11 +45,11 @@ const api = {
     const response = await fetch(`${this.hostname}/user/profile`, {
       headers: new Headers({
         "Content-Type": "application/json",
-        Authorization: `Bearer ${jwtToken}`
-      })
+        Authorization: `Bearer ${jwtToken}`,
+      }),
     });
     return await response.json();
-  }
+  },
 };
 
 export default api;
