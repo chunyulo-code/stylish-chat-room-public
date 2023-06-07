@@ -11,7 +11,6 @@ function ChatAdmin() {
         <Allotment.Pane minSize={125}>
           <Sidebar />
         </Allotment.Pane>
-        s
         <Allotment.Pane snap>
           <ChatWindow />
         </Allotment.Pane>

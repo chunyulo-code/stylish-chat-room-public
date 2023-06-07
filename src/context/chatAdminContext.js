@@ -2,17 +2,42 @@ import { createContext, useState } from "react";
 
 export const ChatAdminContext = createContext({
   currentRoomId: null,
-  isLoadingSidebar: false,
-
-  setIsLoadingSidebar: () => {},
+  isSidebarLoaded: false,
+  chats: [],
+  setChats: () => {},
+  setIsSidebarLoaded: () => {},
   setCurrentRoomId: () => {},
+  initSidebar: () => {},
+  updateSidebar: () => {},
   timeFormatter: () => {}
 });
 
 export const ChatAdminContextProvider = ({ children }) => {
   const [isSidebarLoaded, setIsSidebarLoaded] = useState(false);
-
+  const [chats, setChats] = useState([]);
   const [currentRoomId, setCurrentRoomId] = useState(null);
+  const jwtToken = window.localStorage.getItem("jwtToken");
+
+  function initSidebar() {
+    updateSidebar().then((data) => setCurrentRoomId(data[0].chat_room_id));
+  }
+
+  function updateSidebar() {
+    return new Promise((resolve) => {
+      fetch("https://ctceth.com/api/1.0/admin/chatroom", {
+        headers: new Headers({
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jwtToken}`
+        })
+      })
+        .then((data) => data.json())
+        .then((jsonData) => {
+          setChats(jsonData.data);
+          setIsSidebarLoaded(true);
+          resolve(jsonData.data);
+        });
+    });
+  }
 
   function timeFormatter(timestamp) {
     let formattedHours;
@@ -37,7 +62,11 @@ export const ChatAdminContextProvider = ({ children }) => {
         setCurrentRoomId,
         timeFormatter,
         isSidebarLoaded,
-        setIsSidebarLoaded
+        setIsSidebarLoaded,
+        chats,
+        setChats,
+        initSidebar,
+        updateSidebar
       }}
     >
       {children}

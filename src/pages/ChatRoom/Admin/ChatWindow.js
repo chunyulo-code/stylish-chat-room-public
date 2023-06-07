@@ -3,13 +3,11 @@ import UserMessage from "./UserMessage";
 import AdminMessage from "./AdminMessage";
 import TextArea from "./TextArea";
 import { ChatAdminContext } from "../../../context/chatAdminContext";
-import { AuthContext } from "../../../context/authContext";
 
 export default function ChatWindow() {
   const [chatHistoty, setChatHistory] = useState([]);
   const msgContainer = useRef(null);
-  const { currentRoomId, isSidebarLoaded, setIsSidebarLoaded } =
-    useContext(ChatAdminContext);
+  const { currentRoomId } = useContext(ChatAdminContext);
   const jwtToken = window.localStorage.getItem("jwtToken");
   const adminIds = [25, 26, 27];
 
