@@ -26,6 +26,7 @@ function InputMessage({
           sender_id: profile.user.id,
           time_stamp: time_stamp,
           name: profile.user.name,
+          picture: profile.user.picture,
         },
       ]);
       setSentMessage("");
@@ -38,7 +39,7 @@ function InputMessage({
 
   return (
     <form
-      className="flex gap-x-[20px] lg:flex-col gap-y-[20px] mt-[77px]"
+      className="mt-[40px] flex gap-x-[20px] gap-y-[20px] lg:flex-col"
       onSubmit={(event) => {
         handleSendMessage(event);
         sendMessageToSocket();
@@ -47,11 +48,11 @@ function InputMessage({
       <input
         placeholder="收到的包裹與訂單不符"
         value={sentMessage}
-        className="text-[20px] h-[40px] border border-[#979797] rounded-[15px] px-[15px] w-full lg:text-[15px]"
+        className="h-[40px] w-full rounded-full border border-[#979797] px-[15px] text-sm lg:text-[15px]"
         onChange={handleChange}
       />
       <button
-        className="whitespace-nowrap bg-[#D9D9D9] rounded-[15px] py-[10px] w-[100px] text-center text-[20px] lg:text-[15px] lg:w-full lg:tracking-[10px]"
+        className="w-[100px] whitespace-nowrap rounded-lg bg-[#D9D9D9] py-[10px] text-center text-sm lg:w-full lg:rounded-full lg:text-[15px] lg:tracking-[10px]"
         type="submit"
       >
         送出

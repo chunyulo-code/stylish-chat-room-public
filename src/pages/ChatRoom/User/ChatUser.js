@@ -62,6 +62,7 @@ export default function ChatUser() {
         sender_id: profile.user.id,
         time_stamp: Date.now(),
         name: profile.user.name,
+        picture: profile.user.picture,
       },
       profile.user.id
     );
@@ -116,9 +117,9 @@ export default function ChatUser() {
   }, [historyMessage]);
 
   return (
-    <main className="border border-solid border-[#979797] rounded-[15px] max-w-[1425px] h-[calc(100vh_-_140px_-_40px_-_40px_-_115px)] mt-[40px] mb-[40px] mx-auto px-[85px] pt-[77px] pb-[80px] flex flex-col xl:max-w-[1140px] lg:max-w-none lg:p-0 lg:mt-[20px] lg:px-[20px] lg:border-0 lg:h-[calc(100vh_-_102px_-_20px_-_20px_-_146px_-_60px)]">
+    <main className="mx-auto mb-[40px] mt-[40px] flex h-[calc(100vh_-_140px_-_40px_-_40px_-_115px)] max-w-[1425px] flex-col rounded-[15px] border border-solid border-[#979797] px-[60px] py-[40px] xl:max-w-[1140px] lg:mb-[20px] lg:mt-[20px] lg:h-[calc(100vh_-_102px_-_20px_-_20px_-_146px_-_60px)] lg:max-w-none lg:border-0 lg:p-0 lg:px-[40px]">
       <div
-        className="mb-auto flex flex-col gap-y-[80px] h-full overflow-auto relative pr-[15px] lg:gap-y-[25px]"
+        className="relative mb-auto flex h-full flex-col gap-y-5 overflow-auto scroll-smooth pr-[15px] lg:gap-y-[25px]"
         ref={messageRef}
       >
         {loading ? (
@@ -126,8 +127,8 @@ export default function ChatUser() {
         ) : (
           historyMessage &&
           historyMessage.map((message, index) =>
-            message["sender_id"] !== 40 ? (
-              <UserMessage userChat={message} userImage={user} key={index} />
+            message["sender_id"] !== 26 ? (
+              <UserMessage userChat={message} key={index} />
             ) : (
               <AdminMessage adminChat={message} key={index} />
             )

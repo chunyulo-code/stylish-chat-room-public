@@ -23,7 +23,7 @@ export const AuthContextProvider = ({ children }) => {
 
   const handleLoginResponse = useCallback(async (response) => {
     const accessToken = response.authResponse.accessToken;
-    console.log(accessToken);
+    // console.log(accessToken);
     const { data } = await api.signin({
       provider: "facebook",
       access_token: accessToken,

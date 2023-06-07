@@ -1,24 +1,22 @@
-function UserMessage({ userChat, userImage }) {
+function UserMessage({ userChat }) {
   return (
-    <div className="flex self-end last:mb-[80px]">
-      <div className="self-end mr-[10px]">
-        <span className="text-[14px] lg:text-[12px]">
-          {userChat && userChat.time_stamp}
-        </span>
+    <div className="flex self-end">
+      <div className="mr-[10px] self-end">
+        <span className="text-xs">{userChat && userChat.time_stamp}</span>
       </div>
-      <div className="self-end mr-[17px] flex flex-col pt-[19px] lg:mr-[15px] lg:pt-[12px]">
-        <span className="self-end text-[20px] lg:text-[15px]">
+      <div className="mr-[17px] flex flex-col self-end pt-[10px] lg:mr-[15px] lg:pt-[12px]">
+        <span className="self-end text-sm lg:text-[15px]">
           {userChat && userChat.name}
         </span>
-        <p className="flex items-center mt-[13px] text-[20px] h-[40px] px-[20px] bg-[#d9d9d9] rounded-tl-[15px] rounded-br-[15px] rounded-bl-[15px] lg:text-[15px] lg:px-[28px]">
+        <p className="mt-[13px] flex justify-center rounded-bl-[15px] rounded-br-[15px] rounded-tl-[15px] bg-chatroom-light-gray px-3 py-2 text-sm">
           {userChat && userChat.message}
         </p>
       </div>
       <div className="self-start">
         <img
-          src={userImage}
+          src={userChat.picture}
           alt="fake profile"
-          className="w-[60px] h-[60px] rounded-full"
+          className="h-[40px] w-[40px] rounded-full"
         />
       </div>
     </div>

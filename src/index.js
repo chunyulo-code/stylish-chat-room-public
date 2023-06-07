@@ -9,7 +9,7 @@ import ThankYou from "./pages/ThankYou/ThankYou";
 import Product from "./pages/Product/Product";
 import Profile from "./pages/Profile/Profile";
 import ChatAdmin from "./pages/ChatRoom/Admin/ChatAdmin";
-import ChatUser from "./pages/ChatRoom/ChatUser";
+import ChatUser from "./pages/ChatRoom/User/ChatUser";
 import SocketTest from "./pages/ChatRoom/Admin/ChatRoomSocket";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
