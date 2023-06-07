@@ -4,7 +4,7 @@ import io from "socket.io-client";
 
 const SERVER = "wss://ctceth.com:8080";
 const socket = io.connect(SERVER);
-// console.log("newSocket~");
+console.log("newSocket~");
 
 export default function TextArea({ setChatHistory, scrollToBottom }) {
   const [incomingMsg, setIncomingMsg] = useState("");
@@ -24,7 +24,7 @@ export default function TextArea({ setChatHistory, scrollToBottom }) {
 
   const joinHandler = (room_id) => {
     socket.emit("join room", room_id);
-    // console.log(`Joining room: ${room_id}`);
+    console.log(`Joining room: ${room_id}`);
   };
 
   useEffect(() => {
