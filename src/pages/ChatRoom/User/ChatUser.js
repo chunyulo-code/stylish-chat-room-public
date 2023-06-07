@@ -118,7 +118,7 @@ export default function ChatUser() {
   return (
     <main className="mx-auto mb-[40px] mt-[40px] flex h-[calc(100vh_-_140px_-_40px_-_40px_-_115px)] max-w-[1425px] flex-col rounded-[15px] border border-solid border-[#979797] px-[60px] py-[40px] xl:max-w-[1140px] lg:mb-[20px] lg:mt-[20px] lg:h-[calc(100vh_-_102px_-_20px_-_20px_-_146px_-_60px)] lg:max-w-none lg:border-0 lg:p-0 lg:px-[40px]">
       <div
-        className="relative mb-auto flex h-full flex-col gap-y-5 overflow-auto scroll-smooth pr-[15px] scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-chatroom-gray scrollbar-thumb-rounded-lg lg:gap-y-[25px]"
+        className="relative mb-auto flex h-full flex-col gap-y-5 overflow-auto pr-[15px] scroll-smooth scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-chatroom-gray scrollbar-thumb-rounded-lg lg:gap-y-[25px]"
         ref={messageRef}
       >
         {loading ? (
