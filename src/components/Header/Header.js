@@ -224,6 +224,7 @@ const PageLinkProfileIcon = styled(PageLinkIcon)`
 
 const PageLinkChatIcon = styled(PageLinkIcon)`
   background-image: url(${chatRoom});
+  cursor: pointer;
   @media screen and (max-width: 1279px) {
     display: none;
   }

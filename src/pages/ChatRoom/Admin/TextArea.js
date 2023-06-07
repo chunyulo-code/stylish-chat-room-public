@@ -4,6 +4,7 @@ import io from "socket.io-client";
 
 const SERVER = "wss://ctceth.com:8080";
 const socket = io.connect(SERVER);
+// console.log("newSocket~");
 
 export default function TextArea({ setChatHistory, scrollToBottom }) {
   const [incomingMsg, setIncomingMsg] = useState("");
@@ -16,19 +17,23 @@ export default function TextArea({ setChatHistory, scrollToBottom }) {
       time_stamp: Date.now(),
       chat_room_id: currentRoomId
     };
-
     socket.emit("chat message", data, currentRoomId);
     setChatHistory((prev) => [...prev, data]);
     setIncomingMsg("");
-    scrollToBottom();
+  };
+
+  const joinHandler = (room_id) => {
+    socket.emit("join room", room_id);
+    // console.log(`Joining room: ${room_id}`);
   };
 
   useEffect(() => {
     socket.on("chat message", (data) => {
-      console.log("有訊息進來嗎");
       setChatHistory((prev) => [...prev, data]);
     });
-  }, [socket]);
+  }, []);
+
+  joinHandler(currentRoomId);
 
   return (
     <div className="absolute bottom-5 mt-[60px] flex w-[calc(100%-80px)]">

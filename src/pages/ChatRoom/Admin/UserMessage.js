@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { ChatAdminContext } from "../../../context/chatAdminContext";
 
-export default function UserMessage({ msg, timestamp, img }) {
+export default function UserMessage({ msg, timestamp, img, name }) {
   const { timeFormatter } = useContext(ChatAdminContext);
   // timestamp = 1685912637893;
 
@@ -11,9 +11,9 @@ export default function UserMessage({ msg, timestamp, img }) {
         <img src={img} alt="" className="h-full rounded-full" />
       </div>
       <div className="ml-3">
-        <div className="text-sm text-chatroom-gray">黃鵬宇</div>
+        <div className="text-chatroom-gray text-sm">{name}</div>
         <div className="flex items-end">
-          <span className="mt-2 rounded-lg bg-chatroom-light-gray px-3 py-2 text-sm text-chatroom-gray">
+          <span className="bg-chatroom-light-gray text-chatroom-gray mt-2 rounded-lg px-3 py-2 text-sm">
             {msg}
           </span>
           <span className="ml-2 text-xs">{timeFormatter(timestamp)}</span>

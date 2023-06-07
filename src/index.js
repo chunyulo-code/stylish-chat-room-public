@@ -10,6 +10,7 @@ import Product from "./pages/Product/Product";
 import Profile from "./pages/Profile/Profile";
 import ChatAdmin from "./pages/ChatRoom/Admin/ChatAdmin";
 import ChatUser from "./pages/ChatRoom/ChatUser";
+import SocketTest from "./pages/ChatRoom/Admin/ChatRoomSocket";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -24,6 +25,7 @@ root.render(
         <Route path="profile" element={<Profile />} />
         <Route path="chatAdmin" element={<ChatAdmin />} />
         <Route path="chatuser" element={<ChatUser />} />
+        <Route path="sockettest" element={<SocketTest />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Route>
     </Routes>

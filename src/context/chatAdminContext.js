@@ -25,7 +25,6 @@ export const ChatAdminContextProvider = ({ children }) => {
     else {
       formattedMinutes = minutes;
     }
-    console.log(`${formattedHours}:${formattedMinutes}`);
     return `${formattedHours}:${formattedMinutes}`;
   }
 

@@ -6,6 +6,7 @@ import { ChatAdminContext } from "../../../context/chatAdminContext";
 
 export default function ChatWindow() {
   const [chatHistoty, setChatHistory] = useState([]);
+  const msgContainer = useRef(null);
   const { currentRoomId, isSidebarLoaded, setIsSidebarLoaded } =
     useContext(ChatAdminContext);
   const jwtToken = window.localStorage.getItem("jwtToken");
@@ -27,8 +28,17 @@ export default function ChatWindow() {
       });
   }, [currentRoomId]);
 
+  useEffect(() => {
+    const scrollToBottom = () => {
+      msgContainer.current?.lastElementChild?.scrollIntoView({
+        behavior: "smooth"
+      });
+    };
+    scrollToBottom();
+  }, [chatHistoty]);
+
   return (
-    <div className="px-[40px] pb-[100px] pt-[40px]">
+    <div className="px-[40px] pb-[100px] pt-[40px]" ref={msgContainer}>
       {chatHistoty.length &&
         chatHistoty.map((msg) => {
           if (msg.sender_id === 40)
@@ -43,6 +53,7 @@ export default function ChatWindow() {
             <UserMessage
               img="https://picsum.photos/60"
               msg={msg.message}
+              name={msg.name}
               timestamp={msg.time_stamp}
             />
           );
