@@ -3,13 +3,14 @@ import { ChatAdminContext } from "../../../context/chatAdminContext";
 import { AuthContext } from "../../../context/authContext";
 import io from "socket.io-client";
 
-const SERVER = "wss://ctceth.com:8080";
-const socket = io.connect(SERVER);
-
 export default function TextArea({ setChatHistory, scrollToBottom }) {
   const [incomingMsg, setIncomingMsg] = useState("");
   const { currentRoomId } = useContext(ChatAdminContext);
   const { adminId } = useContext(AuthContext);
+
+  const SERVER = "wss://ctceth.com:8080";
+  const socket = io.connect(SERVER);
+  socket.emit("admin connect", adminId);
 
   const sendHandler = (e) => {
     e.preventDefault();

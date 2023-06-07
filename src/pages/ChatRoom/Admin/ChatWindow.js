@@ -10,7 +10,6 @@ export default function ChatWindow() {
   const msgContainer = useRef(null);
   const { currentRoomId, isSidebarLoaded, setIsSidebarLoaded } =
     useContext(ChatAdminContext);
-  const { adminId } = useContext(AuthContext);
   const jwtToken = window.localStorage.getItem("jwtToken");
   const adminIds = [25, 26, 27];
 
@@ -37,7 +36,6 @@ export default function ChatWindow() {
     scrollToBottom();
   }, [chatHistoty]);
 
-  console.log(chatHistoty[-1]);
   return (
     <div className="relative h-full pb-[100px] pl-[40px] pr-[20px] pt-[40px]">
       <div
