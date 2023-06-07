@@ -38,7 +38,7 @@ function InputMessage({
 
   return (
     <form
-      className="flex gap-x-[20px] lg:flex-col gap-y-[20px]"
+      className="flex gap-x-[20px] lg:flex-col gap-y-[20px] mt-[77px]"
       onSubmit={(event) => {
         handleSendMessage(event);
         sendMessageToSocket();

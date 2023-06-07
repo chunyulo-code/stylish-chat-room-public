@@ -118,7 +118,7 @@ export default function ChatUser() {
   return (
     <main className="border border-solid border-[#979797] rounded-[15px] max-w-[1425px] h-[calc(100vh_-_140px_-_40px_-_40px_-_115px)] mt-[40px] mb-[40px] mx-auto px-[85px] pt-[77px] pb-[80px] flex flex-col xl:max-w-[1140px] lg:max-w-none lg:p-0 lg:mt-[20px] lg:px-[20px] lg:border-0 lg:h-[calc(100vh_-_102px_-_20px_-_20px_-_146px_-_60px)]">
       <div
-        className="mb-auto flex flex-col gap-y-[80px] h-full overflow-auto lg:gap-y-[25px] relative"
+        className="mb-auto flex flex-col gap-y-[80px] h-full overflow-auto relative pr-[15px] lg:gap-y-[25px]"
         ref={messageRef}
       >
         {loading ? (
