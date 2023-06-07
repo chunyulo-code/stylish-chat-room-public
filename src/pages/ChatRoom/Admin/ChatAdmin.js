@@ -7,7 +7,7 @@ import ChatWindow from "./ChatWindow";
 function ChatAdmin() {
   return (
     <div className="h-[calc(100vh-102px-208px)] chun-lg:h-[calc(100vh-140px-115px)]">
-      <Allotment defaultSizes={[125, 200]}>
+      <Allotment defaultSizes={[150, 500]}>
         <Allotment.Pane minSize={125}>
           <Sidebar />
         </Allotment.Pane>
