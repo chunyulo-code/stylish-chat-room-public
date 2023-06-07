@@ -9,7 +9,8 @@ export const AuthContext = createContext({
   adminId: null,
   jwtToken: "",
   login: () => {},
-  logout: () => {}
+  logout: () => {},
+  profile: {},
 });
 
 export const AuthContextProvider = ({ children }) => {
@@ -17,14 +18,17 @@ export const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState({});
   const [loading, setLoading] = useState(true);
   const [jwtToken, setJwtToken] = useState();
+  const [profile, setProfile] = useState();
   const [adminId, setAdminId] = useState();
 
   const handleLoginResponse = useCallback(async (response) => {
     const accessToken = response.authResponse.accessToken;
+    // console.log(accessToken);
     const { data } = await api.signin({
       provider: "facebook",
-      access_token: accessToken
+      access_token: accessToken,
     });
+    setProfile(data);
     const { access_token: tokenFromServer, user: userData } = data;
     // console.log(`tokenFromServer: ${tokenFromServer}`);
     setUser(userData);
@@ -89,7 +93,8 @@ export const AuthContextProvider = ({ children }) => {
         login,
         logout,
         adminId,
-        setAdminId
+        setAdminId,
+        profile,
       }}
     >
       {children}
