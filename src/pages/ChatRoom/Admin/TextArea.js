@@ -33,6 +33,7 @@ export default function TextArea({ setChatHistory, scrollToBottom }) {
   useEffect(() => {
     socket.on("chat message", (data) => {
       setChatHistory((prev) => [...prev, data]);
+      console.log(data);
     });
   }, []);
 
