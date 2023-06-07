@@ -44,7 +44,7 @@ export default function ChatWindow() {
       >
         {!!chatHistoty.length &&
           chatHistoty.map((msg, index) => {
-            if (msg.sender_id === adminId)
+            if (msg.sender_id === adminId || 26 || 27)
               return (
                 <AdminMessage
                   msg={msg.message}
