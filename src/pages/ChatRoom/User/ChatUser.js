@@ -1,10 +1,12 @@
 import { useEffect, useState, useRef, useContext } from "react";
 import { AuthContext } from "../../../context/authContext";
+import Loading from "./Loading";
 import UserMessage from "./UserMessage";
 import AdminMessage from "./AdminMessage";
 import InputMessage from "./InputMessage";
 
 import user from "./user.png";
+import loadingIcon from "./loading.gif";
 
 import io from "socket.io-client";
 const SERVER = "wss://ctceth.com:8080";
@@ -48,6 +50,9 @@ export default function ChatUser() {
   const [historyMessage, setHistoryMessage] = useState([]);
   const [sentMessage, setSentMessage] = useState("");
 
+  // Loading state
+  const [loading, setLoading] = useState(true);
+
   const sendMessageToSocket = () => {
     if (!profile) return;
     socket.emit(
@@ -81,6 +86,7 @@ export default function ChatUser() {
       );
       const newData = convertTimeStampToTwoDigits(data);
       setHistoryMessage(newData);
+      setLoading(false);
     }
     getChatMessage();
   }, [profile]);
@@ -112,17 +118,21 @@ export default function ChatUser() {
   return (
     <main className="border border-solid border-[#979797] rounded-[15px] max-w-[1425px] h-[calc(100vh_-_140px_-_40px_-_40px_-_115px)] mt-[40px] mb-[40px] mx-auto px-[85px] pt-[77px] pb-[80px] flex flex-col xl:max-w-[1140px] lg:max-w-none lg:p-0 lg:mt-[20px] lg:px-[20px] lg:border-0 lg:h-[calc(100vh_-_102px_-_20px_-_20px_-_146px_-_60px)]">
       <div
-        className="mb-auto flex flex-col gap-y-[80px] overflow-auto lg:gap-y-[25px]"
+        className="mb-auto flex flex-col gap-y-[80px] h-full overflow-auto lg:gap-y-[25px] relative"
         ref={messageRef}
       >
-        {historyMessage &&
+        {loading ? (
+          <Loading icon={loadingIcon} />
+        ) : (
+          historyMessage &&
           historyMessage.map((message, index) =>
             message["sender_id"] !== 40 ? (
               <UserMessage userChat={message} userImage={user} key={index} />
             ) : (
               <AdminMessage adminChat={message} key={index} />
             )
-          )}
+          )
+        )}
       </div>
       <InputMessage
         sentMessage={sentMessage}
