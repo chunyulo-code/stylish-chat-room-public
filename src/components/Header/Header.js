@@ -274,7 +274,6 @@ function Header() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const category = searchParams.get("category");
-
   useEffect(() => {
     if (category) setInputValue("");
   }, [category]);
@@ -319,7 +318,15 @@ function Header() {
           <PageLinkProfileIcon icon={profile} url={user?.picture} />
           <PageLinkText>會員</PageLinkText>
         </PageLink>
-        <PageLinkChat to="/chatuser">
+        <PageLinkChat
+          to={`/${
+            user["isAdmin"]
+              ? user.isAdmin
+                ? "chatadmin"
+                : "chatuser"
+              : "profile"
+          }`}
+        >
           <PageLinkChatIcon />
         </PageLinkChat>
       </PageLinks>

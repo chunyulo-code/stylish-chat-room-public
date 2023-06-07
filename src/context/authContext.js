@@ -10,7 +10,7 @@ export const AuthContext = createContext({
   jwtToken: "",
   login: () => {},
   logout: () => {},
-  profile: {},
+  profile: {}
 });
 
 export const AuthContextProvider = ({ children }) => {
@@ -26,7 +26,7 @@ export const AuthContextProvider = ({ children }) => {
     // console.log(accessToken);
     const { data } = await api.signin({
       provider: "facebook",
-      access_token: accessToken,
+      access_token: accessToken
     });
     setProfile(data);
     const { access_token: tokenFromServer, user: userData } = data;
@@ -94,7 +94,7 @@ export const AuthContextProvider = ({ children }) => {
         logout,
         adminId,
         setAdminId,
-        profile,
+        profile
       }}
     >
       {children}

@@ -1,8 +1,8 @@
-import { useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
-import styled from 'styled-components';
+import { useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
+import styled from "styled-components";
 
-import api from '../../utils/api';
+import api from "../../utils/api";
 
 const Wrapper = styled.div`
   height: 500px;
@@ -21,7 +21,7 @@ const Campaign = styled(Link)`
   background-position: center;
   background-image: url(${(props) => props.$backgroundImageUrl});
   opacity: ${(props) => (props.$isActive ? 1 : 0)};
-  ${(props) => props.$isActive && 'z-index: 1;'}
+  ${(props) => props.$isActive && "z-index: 1;"}
   transition: opacity 1s;
   text-decoration: none;
   color: #070707;
@@ -76,14 +76,14 @@ const Dots = styled.div`
 const Dot = styled.div`
   width: 10px;
   height: 10px;
-  background-color: ${(props) => (props.$isActive ? '#8b572a' : 'white')};
+  background-color: ${(props) => (props.$isActive ? "#8b572a" : "white")};
   border-radius: 50%;
   cursor: pointer;
 
   @media screen and (max-width: 1279px) {
     width: 4px;
     height: 4px;
-    background-color: ${(props) => (props.$isActive ? '#8b572a' : 'white')};
+    background-color: ${(props) => (props.$isActive ? "#8b572a" : "white")};
   }
 
   & + & {
@@ -118,15 +118,15 @@ function Carousel() {
       {campaigns.map(({ picture, product_id, story }, index) => (
         <Campaign
           $isActive={index === activeCampaignIndex}
-          $backgroundImageUrl={picture}
+          $backgroundImageUrl={`https://ctceth.com${picture}`}
           key={index}
           to={`/products/${product_id}`}
         >
           <Story>
             <StoryContent>
-              {story.split('\r\n').slice(0, 3).join('\r\n')}
+              {story.split("\r\n").slice(0, 3).join("\r\n")}
             </StoryContent>
-            <StoryTitle>{story.split('\r\n')[3]}</StoryTitle>
+            <StoryTitle>{story.split("\r\n")[3]}</StoryTitle>
           </Story>
         </Campaign>
       ))}

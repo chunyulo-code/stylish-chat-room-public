@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
-import styled from 'styled-components';
-import ReactLoading from 'react-loading';
+import { useEffect, useState } from "react";
+import { Link, useSearchParams } from "react-router-dom";
+import styled from "styled-components";
+import ReactLoading from "react-loading";
 
-import api from '../../utils/api';
+import api from "../../utils/api";
 
 const Wrapper = styled.div`
   max-width: 1200px;
@@ -102,8 +102,8 @@ function Products() {
   const [isLoading, setIsLoading] = useState(false);
   const [searchParams] = useSearchParams();
 
-  const keyword = searchParams.get('keyword');
-  const category = searchParams.get('category') || 'all';
+  const keyword = searchParams.get("keyword");
+  const category = searchParams.get("category") || "all";
 
   useEffect(() => {
     let nextPaging = 0;
@@ -136,10 +136,10 @@ function Products() {
 
     fetchProducts();
 
-    window.addEventListener('scroll', scrollHandler);
+    window.addEventListener("scroll", scrollHandler);
 
     return () => {
-      window.removeEventListener('scroll', scrollHandler);
+      window.removeEventListener("scroll", scrollHandler);
     };
   }, [keyword, category]);
 
@@ -147,7 +147,7 @@ function Products() {
     <Wrapper>
       {products.map(({ id, main_image, colors, title, price }) => (
         <Product key={id} to={`/products/${id}`}>
-          <ProductImage src={main_image} />
+          <ProductImage src={`https://ctceth.com${main_image}`} />
           <ProductColors>
             {colors.map(({ code }) => (
               <ProductColor $colorCode={`#${code}`} key={code} />
