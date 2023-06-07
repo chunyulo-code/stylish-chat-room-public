@@ -126,7 +126,7 @@ export default function ChatUser() {
         ) : (
           historyMessage &&
           historyMessage.map((message, index) =>
-            message["sender_id"] !== 26 ? (
+            message["sender_id"] !== 26 && message["sender_id"] !== 25 && message["sender_id"] !== 27 ? (
               <UserMessage userChat={message} key={index} />
             ) : (
               <AdminMessage adminChat={message} key={index} />
