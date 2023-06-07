@@ -224,6 +224,7 @@ const PageLinkProfileIcon = styled(PageLinkIcon)`
 
 const PageLinkChatIcon = styled(PageLinkIcon)`
   background-image: url(${chatRoom});
+  cursor: pointer;
   @media screen and (max-width: 1279px) {
     display: none;
   }
@@ -254,16 +255,16 @@ const PageLinkText = styled.div`
 const categories = [
   {
     name: "women",
-    displayText: "女裝",
+    displayText: "女裝"
   },
   {
     name: "men",
-    displayText: "男裝",
+    displayText: "男裝"
   },
   {
     name: "accessories",
-    displayText: "配件",
-  },
+    displayText: "配件"
+  }
 ];
 
 function Header() {
@@ -289,7 +290,7 @@ function Header() {
             onClick={() => {
               window.scrollTo({
                 top: 0,
-                behavior: "smooth",
+                behavior: "smooth"
               });
               navigate(`/?category=${name}`);
             }}

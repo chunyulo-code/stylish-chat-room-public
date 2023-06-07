@@ -6,6 +6,7 @@ import Footer from "./components/Footer";
 import Header from "./components/Header";
 import { AuthContextProvider } from "./context/authContext";
 import { CartContextProvider } from "./context/cartContext";
+import { ChatAdminContextProvider } from "./context/chatAdminContext";
 
 const GlobalStyle = createGlobalStyle`
   * {
@@ -35,9 +36,11 @@ function App() {
       <GlobalStyle />
       <AuthContextProvider>
         <CartContextProvider>
-          <Header />
-          <Outlet />
-          <Footer />
+          <ChatAdminContextProvider>
+            <Header />
+            <Outlet />
+            <Footer />
+          </ChatAdminContextProvider>
         </CartContextProvider>
       </AuthContextProvider>
     </>

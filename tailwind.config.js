@@ -2,7 +2,12 @@
 module.exports = {
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        "chatroom-light-gray": "#D9D9D9",
+        "chatroom-gray": "#3F3A3A"
+      }
+    },
     screens: {
       xl: { max: "1280px" },
       // => @media (max-width: 1280px) { ... }
@@ -12,7 +17,8 @@ module.exports = {
 
       md: { max: "480px" },
       // => @media (max-width: 767px) { ... }
-    },
+      "chun-lg": "1280px"
+    }
   },
-  plugins: [],
+  plugins: []
 };
