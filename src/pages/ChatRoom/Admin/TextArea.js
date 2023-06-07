@@ -10,7 +10,8 @@ export default function TextArea({ setChatHistory, scrollToBottom }) {
   const [incomingMsg, setIncomingMsg] = useState("");
   const { currentRoomId } = useContext(ChatAdminContext);
 
-  const sendHandler = () => {
+  const sendHandler = (e) => {
+    e.preventDefault();
     const data = {
       message: incomingMsg,
       sender_id: 40,
@@ -36,20 +37,20 @@ export default function TextArea({ setChatHistory, scrollToBottom }) {
   joinHandler(currentRoomId);
 
   return (
-    <div className="absolute bottom-5 mt-[60px] flex w-[calc(100%-80px)]">
-      <textarea
+    <form
+      className="absolute bottom-5 mt-[60px] flex w-[calc(100%-80px)]"
+      onSubmit={sendHandler}
+    >
+      <input
         type="text"
         className="w-full rounded-lg border border-solid border-chatroom-gray px-2 py-2"
         placeholder="請輸入訊息"
         value={incomingMsg}
         onChange={(e) => setIncomingMsg(e.target.value)}
       />
-      <button
-        onClick={sendHandler}
-        className="ml-[20px] h-[40px] w-[100px] rounded-lg bg-chatroom-light-gray"
-      >
+      <button className="ml-[20px] h-[40px] w-[100px] rounded-lg bg-chatroom-light-gray">
         送出
       </button>
-    </div>
+    </form>
   );
 }

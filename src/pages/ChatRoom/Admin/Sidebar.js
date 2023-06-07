@@ -24,7 +24,7 @@ export default function Sidebar() {
   }, []);
 
   return (
-    <div>
+    <div className="h-full  overflow-y-scroll">
       {chats.map((chat) => (
         <SidebarUser
           picture={chat.picture}

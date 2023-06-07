@@ -38,26 +38,30 @@ export default function ChatWindow() {
   }, [chatHistoty]);
 
   return (
-    <div className="px-[40px] pb-[100px] pt-[40px]" ref={msgContainer}>
-      {chatHistoty.length &&
-        chatHistoty.map((msg) => {
-          if (msg.sender_id === 40)
+    <div className="relative h-full px-[40px] pb-[100px] pt-[40px]">
+      <div className="h-full  overflow-y-scroll" ref={msgContainer}>
+        {chatHistoty.length &&
+          chatHistoty.map((msg, index) => {
+            if (msg.sender_id === 40)
+              return (
+                <AdminMessage
+                  img="https://picsum.photos/60"
+                  msg={msg.message}
+                  timestamp={msg.time_stamp}
+                  key={index}
+                />
+              );
             return (
-              <AdminMessage
+              <UserMessage
                 img="https://picsum.photos/60"
                 msg={msg.message}
+                name={msg.name}
                 timestamp={msg.time_stamp}
+                key={index}
               />
             );
-          return (
-            <UserMessage
-              img="https://picsum.photos/60"
-              msg={msg.message}
-              name={msg.name}
-              timestamp={msg.time_stamp}
-            />
-          );
-        })}
+          })}
+      </div>
       <TextArea setChatHistory={setChatHistory} />
     </div>
   );

@@ -15,8 +15,9 @@ module.exports = {
       lg: { max: "1279px" },
       // => @media (max-width: 1279px) { ... }
 
-      md: { max: "480px" }
+      md: { max: "480px" },
       // => @media (max-width: 767px) { ... }
+      "chun-lg": "1280px"
     }
   },
   plugins: []
