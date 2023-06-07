@@ -8,7 +8,7 @@ export default function AdminMessage({ msg, timestamp }) {
   return (
     <div className="mt-5 flex items-end text-right">
       <span className="ml-auto text-xs">{timeFormatter(timestamp)}</span>
-      <span className="bg-chatroom-light-gray text-chatroom-gray ml-2 mt-2 rounded-lg px-3 py-2 text-sm">
+      <span className="ml-2 mt-2 rounded-lg bg-chatroom-light-gray px-3 py-2 text-sm text-chatroom-gray">
         {msg}
       </span>
     </div>

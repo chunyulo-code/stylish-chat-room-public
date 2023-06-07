@@ -3,14 +3,15 @@ import UserMessage from "./UserMessage";
 import AdminMessage from "./AdminMessage";
 import TextArea from "./TextArea";
 import { ChatAdminContext } from "../../../context/chatAdminContext";
+import { AuthContext } from "../../../context/authContext";
 
 export default function ChatWindow() {
   const [chatHistoty, setChatHistory] = useState([]);
   const msgContainer = useRef(null);
   const { currentRoomId, isSidebarLoaded, setIsSidebarLoaded } =
     useContext(ChatAdminContext);
+  const { adminId } = useContext(AuthContext);
   const jwtToken = window.localStorage.getItem("jwtToken");
-  console.log(currentRoomId);
 
   useEffect(() => {
     if (!currentRoomId) return;
@@ -23,8 +24,6 @@ export default function ChatWindow() {
       .then((data) => data.json())
       .then((jsonData) => {
         setChatHistory(jsonData.data);
-        console.log("Fetch chatroom history again");
-        console.log(jsonData.data);
       });
   }, [currentRoomId]);
 
@@ -38,14 +37,16 @@ export default function ChatWindow() {
   }, [chatHistoty]);
 
   return (
-    <div className="relative h-full px-[40px] pb-[100px] pt-[40px]">
-      <div className="h-full  overflow-y-scroll" ref={msgContainer}>
+    <div className="relative h-full pb-[100px] pl-[40px] pr-[20px] pt-[40px]">
+      <div
+        className="h-full overflow-y-scroll pr-[20px] scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-chatroom-gray scrollbar-thumb-rounded-lg"
+        ref={msgContainer}
+      >
         {!!chatHistoty.length &&
           chatHistoty.map((msg, index) => {
-            if (msg.sender_id === 40)
+            if (msg.sender_id === adminId)
               return (
                 <AdminMessage
-                  img="https://picsum.photos/60"
                   msg={msg.message}
                   timestamp={msg.time_stamp}
                   key={index}
@@ -53,7 +54,7 @@ export default function ChatWindow() {
               );
             return (
               <UserMessage
-                img="https://picsum.photos/60"
+                img={msg.picture}
                 msg={msg.message}
                 name={msg.name}
                 timestamp={msg.time_stamp}

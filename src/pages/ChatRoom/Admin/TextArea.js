@@ -1,22 +1,25 @@
 import React, { useState, useEffect, useContext } from "react";
 import { ChatAdminContext } from "../../../context/chatAdminContext";
+import { AuthContext } from "../../../context/authContext";
 import io from "socket.io-client";
 
 const SERVER = "wss://ctceth.com:8080";
 const socket = io.connect(SERVER);
-console.log("newSocket~");
 
 export default function TextArea({ setChatHistory, scrollToBottom }) {
   const [incomingMsg, setIncomingMsg] = useState("");
   const { currentRoomId } = useContext(ChatAdminContext);
+  const { adminId } = useContext(AuthContext);
 
   const sendHandler = (e) => {
     e.preventDefault();
+    if (!incomingMsg) return;
     const data = {
       message: incomingMsg,
-      sender_id: 40,
+      sender_id: adminId,
       time_stamp: Date.now(),
-      chat_room_id: currentRoomId
+      chat_room_id: currentRoomId,
+      picture: window.localStorage.getItem("userPicture")
     };
     socket.emit("chat message", data, currentRoomId);
     setChatHistory((prev) => [...prev, data]);
@@ -25,7 +28,6 @@ export default function TextArea({ setChatHistory, scrollToBottom }) {
 
   const joinHandler = (room_id) => {
     socket.emit("join room", room_id);
-    console.log(`Joining room: ${room_id}`);
   };
 
   useEffect(() => {

@@ -6,6 +6,7 @@ export const AuthContext = createContext({
   isLogin: false,
   user: {},
   loading: false,
+  adminId: null,
   jwtToken: "",
   login: () => {},
   logout: () => {}
@@ -16,6 +17,7 @@ export const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState({});
   const [loading, setLoading] = useState(true);
   const [jwtToken, setJwtToken] = useState();
+  const [adminId, setAdminId] = useState();
 
   const handleLoginResponse = useCallback(async (response) => {
     const accessToken = response.authResponse.accessToken;
@@ -24,9 +26,12 @@ export const AuthContextProvider = ({ children }) => {
       access_token: accessToken
     });
     const { access_token: tokenFromServer, user: userData } = data;
-    console.log(`tokenFromServer: ${tokenFromServer}`);
+    // console.log(`tokenFromServer: ${tokenFromServer}`);
     setUser(userData);
+    setAdminId(userData.id);
     setJwtToken(tokenFromServer);
+    // console.log(userData.picture);
+    window.localStorage.setItem("userPicture", userData.picture);
     window.localStorage.setItem("jwtToken", tokenFromServer);
     setIsLogin(true);
     return tokenFromServer;
@@ -41,6 +46,7 @@ export const AuthContextProvider = ({ children }) => {
         setLoading(false);
       } else {
         window.localStorage.removeItem("jwtToken");
+        window.localStorage.removeItem("userPicture");
         setLoading(false);
       }
     };
@@ -56,6 +62,7 @@ export const AuthContextProvider = ({ children }) => {
       return tokenFromServer;
     } else {
       window.localStorage.removeItem("jwtToken");
+      window.localStorage.removeItem("userPicture");
       setLoading(false);
       return null;
     }
@@ -68,6 +75,7 @@ export const AuthContextProvider = ({ children }) => {
     setUser({});
     setJwtToken();
     window.localStorage.removeItem("jwtToken");
+    window.localStorage.removeItem("userPicture");
     setLoading(false);
   };
 
@@ -79,7 +87,9 @@ export const AuthContextProvider = ({ children }) => {
         loading,
         jwtToken,
         login,
-        logout
+        logout,
+        adminId,
+        setAdminId
       }}
     >
       {children}

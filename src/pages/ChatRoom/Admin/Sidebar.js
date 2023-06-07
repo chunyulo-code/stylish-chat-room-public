@@ -17,14 +17,13 @@ export default function Sidebar() {
       .then((data) => data.json())
       .then((jsonData) => {
         setChats(jsonData.data);
-        console.log(jsonData.data);
         setCurrentRoomId(jsonData.data[0].chat_room_id);
       })
       .then(setIsSidebarLoaded(true));
   }, []);
 
   return (
-    <div className="h-full  overflow-y-scroll">
+    <div className="h-full overflow-y-scroll scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-chatroom-gray scrollbar-thumb-rounded-lg">
       {chats.map((chat) => (
         <SidebarUser
           picture={chat.picture}
