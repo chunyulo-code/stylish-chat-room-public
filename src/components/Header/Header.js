@@ -277,7 +277,7 @@ function Header() {
   useEffect(() => {
     if (category) setInputValue("");
   }, [category]);
-
+  console.log(user);
   return (
     <Wrapper>
       <Logo to="/" />
