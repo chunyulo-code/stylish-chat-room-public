@@ -321,7 +321,7 @@ function Header() {
         <PageLinkChat
           to={`/${
             user["isAdmin"]
-              ? user.isAdmin
+              ? user.isAdmin === true
                 ? "chatadmin"
                 : "chatuser"
               : "profile"
