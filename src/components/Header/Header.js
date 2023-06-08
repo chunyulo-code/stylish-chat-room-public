@@ -274,10 +274,10 @@ function Header() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const category = searchParams.get("category");
+
   useEffect(() => {
     if (category) setInputValue("");
   }, [category]);
-  console.log(user);
   return (
     <Wrapper>
       <Logo to="/" />
@@ -320,11 +320,11 @@ function Header() {
         </PageLink>
         <PageLinkChat
           to={`/${
-            user["isAdmin"]
-              ? user.isAdmin === true
-                ? "chatadmin"
-                : "chatuser"
-              : "profile"
+            Object.keys(user).length === 0
+              ? "profile"
+              : user.isAdmin
+              ? "chatadmin"
+              : "chatuser"
           }`}
         >
           <PageLinkChatIcon />
