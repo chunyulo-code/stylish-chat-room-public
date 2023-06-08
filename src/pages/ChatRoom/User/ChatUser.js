@@ -16,8 +16,8 @@ const fetchData = async (url, jwt) => {
     method: "GET",
     headers: new Headers({
       "Content-Type": "application/json",
-      Authorization: `Bearer ${jwt}`,
-    }),
+      Authorization: `Bearer ${jwt}`
+    })
   };
   const response = await fetch(url, config);
   const jsonData = await response.json();
@@ -54,6 +54,7 @@ export default function ChatUser() {
 
   const sendMessageToSocket = () => {
     if (!profile) return;
+    if (!sentMessage) return;
     socket.emit(
       "chat message",
       {
@@ -61,7 +62,7 @@ export default function ChatUser() {
         sender_id: profile.user.id,
         time_stamp: Date.now(),
         name: profile.user.name,
-        picture: profile.user.picture,
+        picture: profile.user.picture
       },
       profile.user.id
     );
@@ -109,7 +110,7 @@ export default function ChatUser() {
   useEffect(() => {
     const scrollToBottom = () => {
       messageRef.current?.lastElementChild?.scrollIntoView({
-        behavior: "smooth",
+        behavior: "smooth"
       });
     };
     scrollToBottom();
@@ -118,7 +119,7 @@ export default function ChatUser() {
   return (
     <main className="mx-auto mb-[40px] mt-[40px] flex h-[calc(100vh_-_140px_-_40px_-_40px_-_115px)] max-w-[1425px] flex-col rounded-[15px] border border-solid border-[#979797] px-[60px] py-[40px] xl:max-w-[1140px] lg:mb-[20px] lg:mt-[20px] lg:h-[calc(100vh_-_102px_-_20px_-_20px_-_146px_-_60px)] lg:max-w-none lg:border-0 lg:p-0 lg:px-[40px]">
       <div
-        className="relative mb-auto flex h-full flex-col gap-y-5 overflow-auto pr-[15px] scroll-smooth scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-chatroom-gray scrollbar-thumb-rounded-lg lg:gap-y-[25px]"
+        className="relative mb-auto flex h-full flex-col gap-y-5 overflow-auto scroll-smooth pr-[15px] scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-chatroom-gray scrollbar-thumb-rounded-lg lg:gap-y-[25px]"
         ref={messageRef}
       >
         {loading ? (
@@ -126,7 +127,9 @@ export default function ChatUser() {
         ) : (
           historyMessage &&
           historyMessage.map((message, index) =>
-            message["sender_id"] !== 26 && message["sender_id"] !== 25 && message["sender_id"] !== 27 ? (
+            message["sender_id"] !== 26 &&
+            message["sender_id"] !== 25 &&
+            message["sender_id"] !== 27 ? (
               <UserMessage userChat={message} key={index} />
             ) : (
               <AdminMessage adminChat={message} key={index} />
