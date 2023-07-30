@@ -33,6 +33,30 @@
 
 ## 🔥 Features
 
-#### Users can easily view the campaign on the landing page.
+- #### Implemented swiper effect on the main page's activities, significantly amplifying the effectiveness of product promotions and attracting more customers.
+![swiper](https://github.com/chunyulo-code/stylish-chat-room-public/assets/73751851/d2551d65-9815-48da-9e7f-0444c35d155e)
 
+- #### Successfully achieved continuous product loading using infinite scroll, providing users with a seamless browsing experience.
+![infinite_scroll](https://github.com/chunyulo-code/stylish-chat-room-public/assets/73751851/60f8cf39-cd61-4be2-bafe-672665b99a65)
+
+- #### Customers can conveniently select and filter products of interest using the buttons located in the header.
+![filtered_by_categories](https://github.com/chunyulo-code/stylish-chat-room-public/assets/73751851/a2f77197-8397-4c86-ba40-4170989379ed)
+
+- #### Customers can filter the categories they are interested in by entering text.
+![serch_products](https://github.com/chunyulo-code/stylish-chat-room-public/assets/73751851/1c870367-5dfd-436f-b2fb-768d407059cc)
+
+- #### Customers can add products they are interested in to their shopping cart.
+![addToCart](https://github.com/chunyulo-code/stylish-chat-room-public/assets/73751851/9da349fe-6b2b-4de1-a95b-197e54d6e3d9)
+
+- #### Verify the correctness of user-inputted information using React Hook Form.
+![form_checking](https://github.com/chunyulo-code/stylish-chat-room-public/assets/73751851/221221b1-55df-4fba-824e-a44f8765890b)
+
+
+## 🔗 Links
+  <a href="https://www.linkedin.com/in/chunyulo" text-decoration="none">
+    <img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" />
+  </a>
+  <a href="mailto:chunyulo@arch.nctu.edu.tw">
+    <img src="https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white" />
+  </a>
 
